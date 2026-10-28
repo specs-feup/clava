@@ -2,22 +2,21 @@
 
 This experiment uses an unpublished local clang-dumper build. No release tag or asset is published, and `clang-dumper-release.tag` remains unchanged. The release selected by that file does not implement this new contract. Use the local-build property below; an older schema fails explicitly rather than silently reverting parsed declarations to name-based matching.
 
-## Decisions that were not agreed
+## Behavior decisions
 
-The first implementation mixed technical limits with externally visible behavior choices. That was a mistake:
-passing the regression suite did not establish agreement on these choices. The performance work preserves the
-current behavior while these decisions are resolved.
+The first implementation mixed technical limits with behavior choices that had not been agreed. The following
+requirements now supersede the corresponding experimental restrictions. The runtime changes remain to be implemented.
 
-1. **Repeated header definitions.** The implementation reports multiple occurrences as `AMBIGUOUS`, even for
-   ordinary inline functions. This narrows existing definition lookup. The open question is whether a query should
-   return its own TU's compiler-selected occurrence and expose project conflicts through a separate diagnostic.
-2. **Shared-source edits.** Entity-wide edits currently follow semantic entity identity. A static header function
-   is a different entity in every TU, so that does not synchronize one physical header edit across its contexts.
-   The open question is whether source-level actions must coordinate every occurrence of the edited source.
-3. **Generated-to-parsed binding.** Generated declarations currently occupy a separate domain. Automatic matching
-   to a parsed entity was disabled without first auditing the existing generation workflows. The required API
-   support and an explicit binding mechanism still need to be settled; this is an implementation gap, not an
-   inherent limitation of USRs.
+1. **Repeated header definitions: pending.** The current implementation reports multiple occurrences as
+   `AMBIGUOUS`, even for ordinary inline functions. The proposed behavior is to return the querying TU's
+   compiler-selected occurrence and expose project conflicts separately. This choice remains open.
+2. **Shared-source edits: agreed.** One action must coordinate all occurrences of the physical source and their
+   affected uses, including distinct TU-local entities originating in a shared header. The user should not have to
+   repair callers or repeat the action per TU. If safe coordination requires compiler refresh, report that need
+   explicitly instead of leaving a partially updated program.
+3. **Generated-to-parsed matching: agreed.** Preserve matching from a newly generated declaration to an existing
+   compatible parsed definition without reparsing when the match is unambiguous. A separate generated identity
+   must not disable this workflow. Ambiguous or unsupported relationships must remain explicit.
 
 Two other items are unfinished implementation work, not decisions the user should have to make:
 
@@ -65,6 +64,27 @@ A failed TU decode aborts parsing by default instead of silently producing an in
 
 The analysis group is the App's current set of TUs. Removing a TU and clearing the index removes its included declarations too. This index does not discover executable membership or reproduce archive selection, weak-symbol selection, or final linker resolution. A compilation database alone does not provide those decisions.
 
+## Header AST occurrences and output files
+
+When `a.cpp` and `b.cpp` include `api.hpp`, Clang parses the header in both compilation contexts. An inline
+function body is a normal `FunctionDecl` with a body in each context; Clang's source AST does not replace each
+call with that body. The occurrences can differ after preprocessing and name lookup.
+
+Clava's editable file tree contains declarations belonging to that file. Included header declarations remain
+available through native declaration references and `TranslationUnit.INCLUDED_DECLARATIONS`; they are not
+children to emit into each including `.cpp`. `TranslationUnit.getCode()` emits the file's children and includes,
+and `App.getCode(destination)` emits the selected file trees. Retaining another analysis occurrence does not
+create another output definition.
+
+To regenerate a header from its AST, the header needs its own selected editable file tree. Merely including it
+from a parsed source file does not make Clava emit a modified header automatically. Coordinated header editing
+must therefore connect analysis occurrences to the owning output file as well as update callers. This is part of
+the agreed shared-source edit requirement, not something a definition lookup result alone can accomplish.
+
+The intended source layout keeps a header-defined inline function in its header and keeps includes/calls in the
+source files. The later compiler chooses machine-code inlining; C++ `inline` does not guarantee substitution.
+See the [C++ inline rules](https://eel.is/c++draft/dcl.inline).
+
 ## LLVM 18 identity safeguards
 
 Raw USRs are useful compiler data, but not an infallible equivalence oracle. Native-source regressions establish three relevant LLVM 18 behaviors:
@@ -86,7 +106,7 @@ Function, tag, and global-variable resolution exposes immutable candidate lists 
 - `INCOMPATIBLE`: an entity bucket contains definitions incompatible with the query.
 - `STALE`: identity-relevant edits invalidated compiler metadata.
 
-Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal ambiguity or stale metadata by returning itself as a fallback. Same-location header definitions remain separate and ambiguous, including apparently identical inline definitions. Establishing safe equivalence across preprocessing configurations is future work; equal USRs and source coordinates do not prove the ODR. This is the current implementation's unresolved lookup policy, not an agreed product requirement; see the decisions above.
+Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal ambiguity or stale metadata by returning itself as a fallback. Same-location header definitions remain separate and ambiguous, including apparently identical inline definitions. Establishing safe equivalence across preprocessing configurations is future work; equal USRs and source coordinates do not prove the ODR. This is the current implementation's unresolved lookup policy, not an agreed product requirement; see the pending decision above.
 
 Repeated C tentative definitions within one TU can yield to that TU's full definition. Tentative definitions across TUs remain ambiguous; this is not an implementation of platform common-symbol/linker policies.
 

@@ -110,6 +110,31 @@ class UsrCrossTuRegressionTest extends CrossTuTestSupport {
     }
 
     @ParameterizedTest @EnumSource(Mode.class)
+    void includedInlineBodiesRemainAnalysisOccurrencesRatherThanSourceCopies(Mode mode) throws Exception {
+        var app = parse(mode, sources("api.hpp", "inline int target(){return 7;}",
+                "a.cpp", "#include \"api.hpp\"\nint a(){return target();}",
+                "b.cpp", "#include \"api.hpp\"\nint b(){return target();}"));
+        var calls = app.getDescendants(CallExpr.class);
+        assertEquals(2, calls.size());
+        var first = calls.get(0).get(CallExpr.DIRECT_CALLEE).orElseThrow();
+        var second = calls.get(1).get(CallExpr.DIRECT_CALLEE).orElseThrow();
+        assertNotSame(first, second);
+        assertTrue(first.hasBody());
+        assertTrue(second.hasBody());
+        assertEquals("api.hpp", first.getLocation().getFilename());
+        assertEquals(first.get(NamedDecl.USR), second.get(NamedDecl.USR));
+        assertEquals(2, app.getCode(temporary.resolve("output").toFile()).size());
+        for (var unit : app.getTranslationUnits()) {
+            assertTrue(unit.get(TranslationUnit.INCLUDED_DECLARATIONS).stream()
+                    .anyMatch(declaration -> declaration == first || declaration == second));
+            assertTrue(unit.getCode().contains("#include \"api.hpp\""));
+            assertTrue(unit.getCode().contains("target()"));
+            assertFalse(unit.getCode().contains("inline int target"));
+            assertFalse(unit.getCode().contains("return 7"));
+        }
+    }
+
+    @ParameterizedTest @EnumSource(Mode.class)
     void removingATuRemovesItsIncludedDefinitions(Mode mode) throws Exception {
         var app = parse(mode, sources("api.hpp", "inline int target(){return 7;}",
                 "a.cpp", "int target();", "b.cpp", "#include \"api.hpp\"\nint b(){return target();}"));
