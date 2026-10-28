@@ -45,6 +45,24 @@ public abstract class NamedDecl extends Decl {
 
     /// DATAKEYS BEGIN
 
+    /** Explicit transformation-owned entity identity, separate from the original compiler metadata. */
+    public static final DataKey<Optional<Object>> EDITED_ENTITY = KeyFactory.optional("editedEntity");
+    public static final DataKey<Optional<Object>> EDITED_ENTITY_STATE = KeyFactory.optional("editedEntityState");
+
+    /** Baseline used to reject stale compiler identities after unsupported direct edits. */
+    public static final DataKey<Optional<Object>> USR_SOURCE_STATE = KeyFactory.optional("usrSourceState");
+
+    /** Compiler identity of the parsed entity, separate from node occurrence IDs. */
+    public static final DataKey<String> USR = KeyFactory.string("usr");
+    public static final DataKey<Boolean> USR_GENERATION_FAILED = KeyFactory.bool("usrGenerationFailed");
+    public static final DataKey<Boolean> USR_IS_TU_LOCAL = KeyFactory.bool("usrIsTuLocal");
+    public static final DataKey<Boolean> USR_IS_C_LINKAGE = KeyFactory.bool("usrIsCLinkage");
+    public static final DataKey<String> USR_LINKAGE_NAME = KeyFactory.string("usrLinkageName");
+    public static final DataKey<String> USR_TYPE = KeyFactory.string("usrType");
+    public static final DataKey<Boolean> USR_TYPE_GENERATION_FAILED = KeyFactory.bool("usrTypeGenerationFailed");
+    public static final DataKey<String> USR_DEFINITION_KIND = KeyFactory.string("usrDefinitionKind");
+
+
     public final static DataKey<String> QUALIFIED_PREFIX = KeyFactory.string("qualifiedPrefix");
 
     public final static DataKey<String> DECL_NAME = KeyFactory.string("declName");
@@ -91,6 +109,20 @@ public abstract class NamedDecl extends Decl {
 
     public String getDeclName() {
         return get(DECL_NAME);
+    }
+
+    /** Explicit entity-wide rename. Direct DataKey writes retain their fail-closed stale semantics. */
+    public void renameEntity(String name) {
+        var declarations = new ArrayList<NamedDecl>();
+        var app = getAppTry();
+        app.ifPresent(owner -> declarations.addAll(owner.getEntityOccurrences(this)));
+        if (declarations.isEmpty() && hasValue(USR))
+            throw new IllegalStateException("Cannot rename an unsupported or stale compiler entity");
+        if (declarations.stream().noneMatch(declaration -> declaration == this)) declarations.add(this);
+        Object entity = get(EDITED_ENTITY).orElseGet(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::newEditedEntity);
+        declarations.forEach(declaration -> declaration.set(DECL_NAME, name));
+        declarations.forEach(declaration -> pt.up.fe.specs.clava.utils.CompilerEntityIdentity.captureEdit(declaration, entity));
+        app.ifPresent(pt.up.fe.specs.clava.ast.extra.App::clearCache);
     }
 
     public void setDeclName(String declName) {

@@ -95,7 +95,10 @@ public class CXXRecordDecl extends RecordDecl {
      */
     public void addMethod(CXXMethodDecl method) {
 
-        // Set record of method
+        // Adding a method to a different owning class creates a new entity; its old compiler
+        // USR cannot describe that entity. The generated declaration/definition pair shares our
+        // existing explicit factory identity rules instead.
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGenerated(method);
         method.setRecord(this);
 
         var methodDeclaration = method;
@@ -121,6 +124,7 @@ public class CXXRecordDecl extends RecordDecl {
             // Add method
             addChild(methodDeclaration);
         }
+        getAppTry().ifPresent(pt.up.fe.specs.clava.ast.extra.App::clearCache);
 
         // System.out.println("METOHD NAME: " + method.getDeclName());
         // System.out.println("HAS DEF: " + method.hasBody());

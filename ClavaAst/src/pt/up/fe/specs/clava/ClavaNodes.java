@@ -456,6 +456,7 @@ public class ClavaNodes {
     public static Decl normalizeDecl(Decl decl) {
         if (decl instanceof FunctionDecl) {
             FunctionDecl function = (FunctionDecl) decl;
+            if (function.get(FunctionDecl.IS_EXPLICIT_TEMPLATE_SPECIALIZATION)) return function;
             var primary = function.get(FunctionDecl.PRIMARY_TEMPLATE_DECL);
             if (primary.isEmpty() || !function.get(FunctionDecl.TEMPLATE_KIND).isSpecialization()) {
                 return function;

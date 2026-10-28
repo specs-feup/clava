@@ -62,7 +62,7 @@ public class CxxNamedDecl<Self extends CxxNamedDecl<Self>> extends ANamedDecl<Se
 
     @Override
     public void setNameImpl(String name) {
-        this.getNodeImpl().set(NamedDecl.DECL_NAME, name);
+        this.getNodeImpl().renameEntity(name);
     }
 
     @Override

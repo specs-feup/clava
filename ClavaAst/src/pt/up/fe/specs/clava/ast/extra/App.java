@@ -21,6 +21,8 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
@@ -254,6 +256,14 @@ public class App extends ClavaNode {
                 .findFirst();
     }
 
+    public List<NamedDecl> getEntityOccurrences(NamedDecl declaration) {
+        return getDeclarationsCache().getEntityOccurrences(declaration);
+    }
+
+    public boolean isSameFunctionEntity(FunctionDecl first, FunctionDecl second) {
+        return getDeclarationsCache().sameFunctionEntity(first, second);
+    }
+
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
         return getDeclarationsCache().getFunctionPrototypes(function);
     }
@@ -277,6 +287,14 @@ public class App extends ClavaNode {
 
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
         return getDeclarationsCache().getGlobalVarDefinition(varDecl);
+    }
+
+    public pt.up.fe.specs.clava.utils.DefinitionResolution<TagDecl> getTagDefinitionResolution(TagDecl tag) {
+        return getDeclarationsCache().getTagResolution(tag);
+    }
+
+    public pt.up.fe.specs.clava.utils.DefinitionResolution<VarDecl> getGlobalVarDefinitionResolution(VarDecl variable) {
+        return getDeclarationsCache().getGlobalVarResolution(variable);
     }
 
     public GlobalManager getGlobalManager() {

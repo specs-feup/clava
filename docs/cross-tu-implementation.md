@@ -1,5 +1,7 @@
 # Cross-TU fixes and supported contract
 
+This document describes the earlier structured-key implementation. The unpublished local USR experiment and its current contract are documented in [cross-tu-usr.md](cross-tu-usr.md).
+
 The approved work addresses CTU01, CTU02, CTU04, CTU05, CTU06, CTU07, CTU08, CTU10, CTU11, CTU13, CTU14, CTU15, and CTU16 together. CTU03 was investigated separately and reported as [clang-dumper issue #58](https://github.com/specs-feup/clang-dumper/issues/58). Its native fix is outside this change.
 
 ## Two identities, two responsibilities

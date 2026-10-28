@@ -54,8 +54,13 @@ sourceSets {
     }
 }
 
+// Select the local executable and matching schema together without changing a release tag.
+def localDumperBuild = providers.gradleProperty('clangDumperBuild').map { file(it).absolutePath }
 processResources {
-    from('clang-dumper-release.tag')
+    inputs.property('clangDumperBuild', localDumperBuild.orElse(''))
+    from('clang-dumper-release.tag') {
+        filter { line -> localDumperBuild.isPresent() ? localDumperBuild.get() : line }
+    }
     from('cuda-release.tag')
 }
 
@@ -65,11 +70,12 @@ def wireSchemaDir = layout.buildDirectory.dir('generated/wire-schema')
 def wireSchema = tasks.register('wireSchema') {
     def tagFile = file('clang-dumper-release.tag')
     inputs.file(tagFile)
+    inputs.property('clangDumperBuild', localDumperBuild.orElse(''))
     outputs.dir(wireSchemaDir)
     // A local build can change without the tag changing.
-    outputs.upToDateWhen { !new File(tagFile.text.trim()).absolute }
+    outputs.upToDateWhen { !localDumperBuild.isPresent() && !new File(tagFile.text.trim()).absolute }
     doLast {
-        def tag = tagFile.text.trim()
+        def tag = localDumperBuild.getOrElse(tagFile.text.trim())
         def read = { String name ->
             new File(tag).absolute ? new File(tag, name).bytes
                     : URI.create("https://github.com/specs-feup/clang-dumper/releases/download/$tag/$name").toURL().bytes

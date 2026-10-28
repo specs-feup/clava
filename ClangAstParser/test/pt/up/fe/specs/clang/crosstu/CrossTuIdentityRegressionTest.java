@@ -66,7 +66,7 @@ class CrossTuIdentityRegressionTest extends CrossTuTestSupport {
     void incompatibleReturnTypeDoesNotSupplyADefinition(Mode mode) throws Exception {
         var app = parse(mode, sources("a.cpp", "int value(); int use(){return value();}", "b.cpp", "double value(){return 1;}"));
         assertTrue(function(app, "value", "a.cpp").getImplementation().isEmpty());
-        assertEquals(pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.MISSING,
+        assertEquals(pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.INCOMPATIBLE,
                 app.getFunctionDefinitionResolution(function(app, "value", "a.cpp")).kind());
     }
 

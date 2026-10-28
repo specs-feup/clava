@@ -6,7 +6,9 @@ Query.search("record", "A").first().name = "A_renamed";
 Query.search("function", "template_foo").first().name = "template_foo_renamed";
 
 for (const $call of Query.search("call", "template_foo_2")) {
-    $call.definition.name = "template_foo_2_renamed";
+    // Included header definitions remain distinct occurrences. Rename the entity through its declaration
+    // instead of selecting an arbitrary project-wide definition.
+    $call.declaration.name = "template_foo_2_renamed";
     break;
 }
 

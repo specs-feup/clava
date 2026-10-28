@@ -104,6 +104,14 @@ public final class WireReader {
     private boolean headerSeen, endSeen;
 
     private WireReader(ClangAstData data, String scope) {
+        // This reader/index contract requires compiler identity metadata. An older published schema
+        // must fail explicitly rather than silently classify parsed declarations as generated nodes.
+        try {
+            schema.table("NamedDeclData").field("usr");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("This cross-TU index requires a USR-enabled local clang-dumper build. "
+                    + "Build clang-dumper and select it with -PclangDumperBuild=/absolute/path/to/build", e);
+        }
         nodeParser.init(data);
         tu = new Tu(data, data.getClavaNodes(), scope, new ArrayList<>(List.of("")));
     }

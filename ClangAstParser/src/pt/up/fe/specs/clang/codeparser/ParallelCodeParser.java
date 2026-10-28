@@ -155,6 +155,7 @@ public class ParallelCodeParser extends CodeParser {
         // Collect parsing results
         List<ClangAstData> clangParserResults = new ArrayList<>();
         List<File> ignoredFiles = new ArrayList<>();
+        var decodingFailures = new ArrayList<Exception>();
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
@@ -166,11 +167,19 @@ public class ParallelCodeParser extends CodeParser {
                     throw new RuntimeException("Error while validating syntax of file '" + sources.get(i) + "'", e);
                 }
 
-                SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
+                SpecsLogs.warn("Could not decode translation unit '" + sources.get(i) + "'", e);
+                decodingFailures.add(e);
                 ignoredFiles.add(sources.get(i));
                 continue;
             }
 
+        }
+
+        if (!decodingFailures.isEmpty() && !get(CONTINUE_ON_PARSING_ERRORS)) {
+            var failure = new RuntimeException("Refusing to build a cross-TU index from incomplete input; "
+                    + "could not decode " + ignoredFiles, decodingFailures.get(0));
+            decodingFailures.stream().skip(1).forEach(failure::addSuppressed);
+            throw failure;
         }
 
         // No AST was decoded, just report syntax validation errors

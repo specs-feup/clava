@@ -18,7 +18,9 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.utils.CompilerEntityIdentity;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
@@ -63,6 +65,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     /**
      * The kind of templated function.
      */
+    public static final DataKey<Boolean> IS_EXPLICIT_TEMPLATE_SPECIALIZATION =
+            KeyFactory.bool("isExplicitTemplateSpecialization");
+
     public final static DataKey<TemplateKind> TEMPLATE_KIND = KeyFactory
             .enumeration("templateKind", TemplateKind.class)
             .setDefault(() -> TemplateKind.NON_TEMPLATE);
@@ -161,20 +166,31 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public void setReturnType(Type returnType) {
+        editEntity(function -> {
+            var type = (FunctionType) function.getFunctionType().copy();
+            type.set(FunctionType.RETURN_TYPE, returnType);
+            function.setType(type);
+        });
+    }
 
-        FunctionType functionType = getFunctionType();
-
-        // Create a copy of the function type, to avoid setting the type on all functions with the same signature
-        FunctionType functionTypeCopy = (FunctionType) functionType.copy();
-
-        // Replace the return type of the function type copy
-        functionTypeCopy.set(FunctionType.RETURN_TYPE, returnType);
-
-        // Set the function type copy as the type of the function in all declarations
-        for (var function : getDecls()) {
-            function.setType(functionTypeCopy);
+    /** Maintain declaration relationships for a supported edit; compiler expression semantics remain unchanged. */
+    private void editEntity(java.util.function.Consumer<FunctionDecl> edit) {
+        var app = getAppTry();
+        if (app.isPresent()) {
+            var resolution = app.get().getFunctionDefinitionResolution(this);
+            if (resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.STALE
+                    || resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.UNSUPPORTED
+                    || resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.INCOMPATIBLE)
+                throw new IllegalStateException("Cannot edit an entity with " + resolution.kind() + " declaration relationships");
         }
-
+        var declarations = new ArrayList<FunctionDecl>();
+        app.ifPresent(owner -> owner.getEntityOccurrences(this).stream().filter(FunctionDecl.class::isInstance)
+                .map(FunctionDecl.class::cast).forEach(declarations::add));
+        if (declarations.stream().noneMatch(function -> function == this)) declarations.add(this);
+        Object entity = get(NamedDecl.EDITED_ENTITY).orElseGet(CompilerEntityIdentity::newEditedEntity);
+        declarations.forEach(edit);
+        declarations.forEach(function -> CompilerEntityIdentity.captureEdit(function, entity));
+        app.ifPresent(App::clearCache);
     }
 
     public boolean isInline() {
@@ -265,9 +281,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         // Search for the definition, returns definitions that is already in the tree
         // return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
-        var definition = getAppTry().flatMap(app -> app.getFunctionImplementation(this));
-        if (definition.isPresent()) {
-            return definition;
+        var app = getAppTry();
+        if (app.isPresent()) {
+            var resolution = app.get().getFunctionDefinitionResolution(
+                    (FunctionDecl) ClavaNodes.normalizeDecl(this));
+            if (resolution.unique().isPresent()) return resolution.unique();
+            // Parsed entities obey the selected analysis group and never hide a conflict or stale
+            // compiler identity by returning the querying occurrence's body.
+            if (hasValue(NamedDecl.USR) || resolution.kind() != pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.MISSING)
+                return Optional.empty();
         }
 
         // If has body, return immediately
@@ -366,7 +388,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         if (getParent() instanceof FunctionTemplateDecl template && template.getTemplateDecl() == this) {
             return "";
         }
-        return getEnclosingTemplateHeadersCode();
+        String headers = getEnclosingTemplateHeadersCode();
+        return get(IS_EXPLICIT_TEMPLATE_SPECIALIZATION) && !headers.contains("template<>")
+                ? headers + "template<>\n" : headers;
     }
 
     /** Template headers belonging to enclosing classes, before a member template header. */
@@ -389,7 +413,8 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     protected String getNameForCode() {
-        return getDeclName();
+        return getDeclName() + (get(IS_EXPLICIT_TEMPLATE_SPECIALIZATION)
+                ? TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this) : "");
     }
 
     @Override
@@ -496,31 +521,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public FunctionDecl setName(String name) {
-
-        set(DECL_NAME, name);
-
+        editEntity(function -> function.set(DECL_NAME, name));
         return this;
     }
 
     private boolean isCorrespondingCall(CallExpr call) {
-        // If declaration exists, declaration of call must exist too, if call refers to this function
-        var callDecl = call.getFunctionDecl();
-
-        Optional<Boolean> result = getImplementation().map(decl -> match(decl, callDecl));
-        if (result.isPresent()) {
-            return result.get();
-        }
-
-        result = getPrototypes().stream().map(def -> match(def, callDecl)).findFirst();
-        if (result.isPresent()) {
-            return result.get();
-        }
-
-        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
-    }
-
-    private static boolean match(FunctionDecl decl, Optional<FunctionDecl> callDecl) {
-        return callDecl.map(cDecl -> decl.equals(cDecl)).orElse(false);
+        return call.getFunctionDecl().map(declaration -> getAppTry()
+                .map(app -> app.isSameFunctionEntity(this, declaration)).orElse(this == declaration)).orElse(false);
     }
 
     /**
@@ -541,7 +548,8 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public void setParameters(List<ParmVarDecl> params) {
-        getDecls().forEach(fdecl -> fdecl.setParametersSingle(params));
+        editEntity(function -> function.setParametersSingle(params.stream()
+                .map(parameter -> (ParmVarDecl) parameter.copy()).toList()));
     }
 
     private void setParametersSingle(List<ParmVarDecl> params) {
@@ -573,14 +581,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             return;
         }
 
-        // Set type of parameter
-        var param = getChild(ParmVarDecl.class, index);
-        param.setType(type);
-
-        // Set type of the function type
-        var newFunctionType = ((FunctionType) getFunctionType().copy());
-        newFunctionType.setParamType(index, type);
-        setFunctionType(newFunctionType);
+        editEntity(function -> {
+            function.getChild(ParmVarDecl.class, index).setType(type);
+            var functionType = (FunctionType) function.getFunctionType().copy();
+            functionType.setParamType(index, type);
+            function.setType(functionType);
+        });
     }
 
     public String getSignature() {
@@ -625,7 +631,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     private FunctionDecl cloneAndInsert(String newName, TranslationUnit destinationUnit, boolean insert) {
         // Get both declaration and definition (if present)
         var definition = getImplementation();
-        var declaration = getPrototypes();
+        var declaration = getPrototypes().stream().filter(node -> node.hasParent()).toList();
 
         Optional<FunctionDecl> newDefinition = definition.map(def -> def.copyFunction(newName));
 
@@ -653,6 +659,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         }
 
+        getAppTry().ifPresent(App::clearCache);
         // Return corresponding clone
         if (hasBody()) {
             return newDefinition.get();
@@ -663,7 +670,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     protected FunctionDecl copyFunction(String newName) {
         var copy = (FunctionDecl) copy();
-        copy.setName(newName);
+        copy.getDescendantsAndSelfStream().filter(NamedDecl.class::isInstance).map(NamedDecl.class::cast)
+                .forEach(CompilerEntityIdentity::makeGenerated);
+        copy.set(DECL_NAME, newName);
 
         return copy;
     }
@@ -674,8 +683,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @param type
      */
     public void setFunctionType(FunctionType type) {
-        getPrototypes().stream().forEach(decl -> decl.setType(type));
-        getImplementation().ifPresent(decl -> decl.setType(type));
+        editEntity(function -> function.setType(type));
     }
 
     @Override

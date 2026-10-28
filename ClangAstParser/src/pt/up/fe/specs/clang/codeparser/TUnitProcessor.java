@@ -18,6 +18,8 @@ import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.utils.CompilerEntityIdentity;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.util.SpecsIo;
 
@@ -63,9 +65,31 @@ public class TUnitProcessor {
                 .map(data -> data.get(ClangAstData.TRANSLATION_UNIT))
                 .collect(Collectors.toList());
 
-        if (!normalize) {
-            return tUnits;
+        assignTranslationUnitOrigins(tUnits);
+        for (int i = 0; i < tUnits.size(); i++) {
+            var included = new ArrayList<NamedDecl>();
+            for (var node : parsingData.get(i).get(ClangAstData.CLAVA_NODES).getNodes().values()) {
+                if (node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR)) {
+                    if (declaration.get(NamedDecl.USR_GENERATION_FAILED) != declaration.get(NamedDecl.USR).isEmpty())
+                        throw new IllegalArgumentException("Inconsistent USR generation status for node " + declaration.getId());
+                    if (declaration.get(NamedDecl.USR_TYPE_GENERATION_FAILED) != declaration.get(NamedDecl.USR_TYPE).isEmpty())
+                        throw new IllegalArgumentException("Inconsistent type USR generation status for node " + declaration.getId());
+                    if (!Set.of("none", "declaration", "definition", "tentative")
+                            .contains(declaration.get(NamedDecl.USR_DEFINITION_KIND)))
+                        throw new IllegalArgumentException("Unknown compiler definition kind for node " + declaration.getId());
+                    CompilerEntityIdentity.capture(declaration);
+                    if (declaration.getAncestorTry(TranslationUnit.class).isEmpty()) included.add(declaration);
+                }
+            }
+            tUnits.get(i).set(TranslationUnit.INCLUDED_DECLARATIONS, List.copyOf(included));
         }
+        // Native references already resolve through the dump-local node registry. Rewriting them
+        // by source coordinates would destroy TU ownership, particularly for macro-configured headers.
+        // Cross-TU entity lookup belongs exclusively to DeclarationsCache.
+        boolean compilerGraph = parsingData.stream()
+                .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
+                .anyMatch(node -> node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR));
+        if (!normalize || compilerGraph) return tUnits;
 
         resetRunState();
         try {
@@ -240,6 +264,9 @@ public class TUnitProcessor {
     }
 
     private ClavaNode normalizeNode(ClavaNode node) {
+        // A compiler-selected declaration target is an occurrence in its original TU. The entity index
+        // connects it to other declarations without redirecting it to a different TU's mutable node.
+        if (node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR)) return null;
         if (!isNormalizable(node)) {
             return null;
         }
