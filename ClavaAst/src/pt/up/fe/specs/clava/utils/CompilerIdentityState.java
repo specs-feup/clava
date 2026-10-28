@@ -29,6 +29,8 @@ final class CompilerIdentityState {
         observations = observe(owner, sharedTypes);
     }
 
+    boolean owns(NamedDecl declaration) { return owner == declaration; }
+
     boolean isCurrent(NamedDecl declaration) {
         // A raw AST copy can carry the source snapshot. Never validate that copy using the source's stamps.
         if (owner != declaration) return baseline.equals(CompilerEntityIdentity.sourceState(declaration));
@@ -117,10 +119,10 @@ final class CompilerIdentityState {
                 if (parent instanceof TemplateDecl template) value(template.getTemplateParameters());
             }
             if (declaration instanceof ValueDecl value) value(value.getType());
-            if (declaration instanceof VarDecl variable) value(variable.getChildrenMutable());
+            if (declaration instanceof VarDecl variable) structure(variable.getChildrenMutable());
             if (declaration instanceof FunctionDecl function) {
                 // Includes child-list bypasses of the normal tree mutators, and function body presence.
-                value(function.getChildrenMutable());
+                structure(function.getChildrenMutable());
                 value(function.get(FunctionDecl.TEMPLATE_ARGUMENTS));
                 value(function.get(FunctionDecl.TEMPLATE_PARAMETERS));
             }
@@ -128,6 +130,11 @@ final class CompilerIdentityState {
             if (declaration instanceof ClassTemplateSpecializationDecl specialization)
                 value(specialization.get(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS));
             if (declaration instanceof TemplateDecl template) value(template.getTemplateParameters());
+        }
+
+        void structure(List<?> children) {
+            if (visited.add(children)) observations.add(new ListStamp(children, children.toArray()));
+            for (var child : children) if (child instanceof NamedDecl declaration) declaration(declaration);
         }
 
         void type(Type type) {
@@ -164,6 +171,14 @@ final class CompilerIdentityState {
                 if (!visited.add(list)) return;
                 observations.add(new ListStamp(list, list.toArray()));
                 list.forEach(this::value);
+                return;
+            }
+            if (value instanceof ClavaNode node) {
+                if (!visited.add(node)) return;
+                stamp(node);
+                value(node.getChildrenMutable());
+                for (var key : node.getDataKeysWithValues())
+                    if (key != ClavaNode.CONTEXT && key != ClavaNode.ORIGIN) value(node.get(key));
                 return;
             }
             if (value instanceof DataClass<?> data) {

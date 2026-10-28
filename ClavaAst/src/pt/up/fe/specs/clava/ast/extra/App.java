@@ -78,6 +78,8 @@ public class App extends ClavaNode {
     private DeclarationsCache declarationsCache;
     private pt.up.fe.specs.clava.utils.SharedSourceEdits sharedSourceEdits;
     private final Set<java.nio.file.Path> sourceActionFiles = new HashSet<>();
+    private int declarationEditDepth;
+    public boolean isEditingDeclarations() { return declarationEditDepth > 0; }
     private final Set<FunctionDecl> editedSignatures = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public void captureSharedSources() {
@@ -90,6 +92,13 @@ public class App extends ClavaNode {
             if (declaration.hasValue(NamedDecl.USR) && declaration.getAncestorTry(TranslationUnit.class).isEmpty()
                     && pt.up.fe.specs.clava.utils.SourceDeclaration.of(declaration).isEmpty())
                 throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("no unique source owner for " + declaration.getDeclName());
+        var preserved = getDeclarationsCache().currentIdentities();
+        var preservedStates = new IdentityHashMap<NamedDecl, Object>();
+        var editMetadata = new IdentityHashMap<NamedDecl, List<Optional<Object>>>();
+        for (var declaration : preserved.keySet()) {
+            preservedStates.put(declaration, pt.up.fe.specs.clava.utils.CompilerEntityIdentity.sourceState(declaration));
+            editMetadata.put(declaration, List.of(declaration.get(NamedDecl.EDITED_ENTITY), declaration.get(NamedDecl.EDITED_ENTITY_STATE)));
+        }
         var identities = getDeclarationsCache().editIdentities(declarations);
         if (sharedSourceEdits == null) captureSharedSources();
         var sourceBefore = sharedSourceEdits.before();
@@ -118,6 +127,7 @@ public class App extends ClavaNode {
         for (var node : nodes) if (node instanceof pt.up.fe.specs.clava.ast.expr.MemberExpr member
                 && declarations.stream().anyMatch(declaration -> declaration == member.getMemberDecl()))
             members.put(member, member.getMemberName());
+        declarationEditDepth++;
         try {
             declarations.forEach(edit);
             for (var member : members.keySet()) {
@@ -131,6 +141,9 @@ public class App extends ClavaNode {
                     throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("unsupported member reference spelling");
             }
             identities.forEach(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::captureEdit);
+            for (var declaration : preserved.keySet())
+                if (!preservedStates.get(declaration).equals(pt.up.fe.specs.clava.utils.CompilerEntityIdentity.sourceState(declaration)))
+                    pt.up.fe.specs.clava.utils.CompilerEntityIdentity.captureEdit(declaration, preserved.get(declaration));
             for (var unit : getTranslationUnits()) if (!unit.getCode().equals(unitCodeBefore.get(unit)))
                 changedFiles.add(unit.getFile().toPath().toAbsolutePath().normalize());
             sharedSourceEdits.after(sourceBefore);
@@ -144,9 +157,13 @@ public class App extends ClavaNode {
             }
             for (var node : data.keySet()) for (var child : children.get(node)) node.addChild(child);
             members.forEach(pt.up.fe.specs.clava.ast.expr.MemberExpr::setMemberName);
+            editMetadata.forEach((declaration, values) -> {
+                declaration.set(NamedDecl.EDITED_ENTITY, values.get(0));
+                declaration.set(NamedDecl.EDITED_ENTITY_STATE, values.get(1));
+            });
             clearCache();
             throw failure;
-        }
+        } finally { declarationEditDepth--; }
         for (var declaration : declarations) if (declaration instanceof FunctionDecl function
                 && arities.get(function) != function.getNumParameters())
             editedSignatures.add(function);
@@ -190,7 +207,7 @@ public class App extends ClavaNode {
         super(dataStore, children);
 
         sourceFiles = new HashMap<>();
-        globalManager = new GlobalManager();
+        globalManager = new GlobalManager(this);
 
         declarationsCache = null;
 

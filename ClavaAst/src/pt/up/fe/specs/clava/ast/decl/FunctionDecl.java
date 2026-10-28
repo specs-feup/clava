@@ -157,6 +157,19 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         throw new RuntimeException("Stmt now allowed as a definition of FunctionDecl: " + definition.getClass());
     }
 
+    @Override
+    public void setType(Type type) {
+        if (!coordinateSourceEdit()) { super.setType(type); return; }
+        var replacement = pt.up.fe.specs.clava.Types.getFunctionType(type);
+        if (replacement.getParamTypes().size() != getNumParameters())
+            throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("use setParameters to change parameter count and names");
+        editEntity(function -> {
+            function.set(TYPE, type);
+            for (int i = 0; i < function.getNumParameters(); i++)
+                function.getParameters().get(i).set(ValueDecl.TYPE, replacement.getParamTypes().get(i));
+        });
+    }
+
     public FunctionType getFunctionType() {
         return Types.getFunctionType(getType());
     }
@@ -175,12 +188,18 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /** Maintain declaration relationships for a supported edit; compiler expression semantics remain unchanged. */
     private void editEntity(java.util.function.Consumer<FunctionDecl> edit) {
+        // A detached factory node is still under construction; it has no existing declaration group to edit.
+        if (!hasValue(NamedDecl.USR) && get(NamedDecl.EDITED_ENTITY).isEmpty() && getParent() == null) {
+            edit.accept(this);
+            return;
+        }
         var app = getAppTry();
         if (app.isPresent()) {
             var resolution = app.get().getFunctionDefinitionResolution(this);
             if (resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.STALE
                     || resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.UNSUPPORTED
-                    || resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.INCOMPATIBLE)
+                    || (resolution.kind() == pt.up.fe.specs.clava.utils.DefinitionResolution.Kind.INCOMPATIBLE
+                        && get(NamedDecl.EDITED_ENTITY).isEmpty()))
                 throw new IllegalStateException("Cannot edit an entity with " + resolution.kind() + " declaration relationships");
         }
         var declarations = new ArrayList<FunctionDecl>();
@@ -215,9 +234,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @return
      */
     public Optional<Stmt> setBody(Stmt body) {
-        if (hasValue(NamedDecl.USR) && get(NamedDecl.USR_SOURCE_STATE).isPresent() && getAppTry().isPresent()) {
+        if (coordinateSourceEdit()) {
             Optional<Stmt> previous = hasBody() ? Optional.of((Stmt) getChild(getNumChildren() - 1)) : Optional.empty();
-            editEntity(function -> function.setBodySingle((Stmt) body.copy()));
+            var source = pt.up.fe.specs.clava.utils.SourceDeclaration.of(this);
+            editEntity(function -> {
+                if (function == this || (source.isPresent() && source.equals(pt.up.fe.specs.clava.utils.SourceDeclaration.of(function))))
+                    function.setBodySingle((Stmt) body.copy());
+            });
             return previous;
         }
         return setBodySingle(body);

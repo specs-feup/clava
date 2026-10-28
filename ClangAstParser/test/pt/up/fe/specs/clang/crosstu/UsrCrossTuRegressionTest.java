@@ -267,7 +267,7 @@ class UsrCrossTuRegressionTest extends CrossTuTestSupport {
         var app = parse(mode, sources("use.cpp", "int target(int);", "impl.cpp", "int target(int x){return x;}"));
         var declaration = function(app, "target", "use.cpp");
         assertEquals(Kind.UNIQUE, app.getFunctionDefinitionResolution(declaration).kind());
-        declaration.getParameters().get(0).setType(app.getFactory().builtinType("double"));
+        declaration.getParameters().get(0).set(ValueDecl.TYPE, app.getFactory().builtinType("double"));
         assertEquals(Kind.STALE, app.getFunctionDefinitionResolution(declaration).kind());
     }
 

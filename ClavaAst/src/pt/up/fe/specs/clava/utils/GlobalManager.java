@@ -1,63 +1,62 @@
-/**
- * Copyright 2017 SPeCS.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
+/* Copyright 2026 SPeCS. Licensed under the Apache License, Version 2.0. */
 package pt.up.fe.specs.clava.utils;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
-import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
-import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
+import java.util.*;
+import pt.up.fe.specs.clava.ast.decl.*;
+import pt.up.fe.specs.clava.ast.decl.enums.*;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.extra.*;
 import pt.up.fe.specs.clava.ast.type.Type;
 
+/** Ensures one live, type-compatible shared global; no name-only memory survives AST changes. */
 public class GlobalManager {
-
-    Set<String> definedVars;
-
-    public GlobalManager() {
-
-        definedVars = new HashSet<>();
-    }
-
-    public VarDecl addGlobal(TranslationUnit tunit, String name, Type type, Expr initValue) {
-
-        boolean isDefined = definedVars.contains(name);
-        if (!isDefined) {
-            definedVars.add(name);
+    private final App owner;
+    private final Set<TranslationUnit> units = Collections.newSetFromMap(new IdentityHashMap<>());
+    public GlobalManager() { this(null); }
+    public GlobalManager(App owner) { this.owner = owner; }
+    public VarDecl addGlobal(TranslationUnit unit, String name, Type type, Expr initializer) {
+        if (owner != null && !owner.getTranslationUnits().contains(unit)) throw new IllegalArgumentException("TU belongs to another App");
+        units.add(unit);
+        var declaration = unit.getFactory().varDecl(name, type);
+        declaration.set(VarDecl.IS_USED, true);
+        declaration.set(VarDecl.HAS_GLOBAL_STORAGE, true);
+        declaration.set(NamedDecl.LINKAGE, Linkage.External);
+        declaration.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
+        unit.addDeclaration(declaration);
+        try {
+            var graph = owner == null ? units : owner.getTranslationUnits();
+            var inventory = new ArrayList<NamedDecl>();
+            for (var tu : graph) {
+                tu.getDescendantsStream().filter(NamedDecl.class::isInstance).map(NamedDecl.class::cast).forEach(inventory::add);
+                inventory.addAll(tu.get(TranslationUnit.INCLUDED_DECLARATIONS));
+            }
+            var binding = new PostEditBindings(owner, inventory).bind(declaration);
+            if (binding.status() != PostEditBindings.Status.PROVEN)
+                throw new RefreshRequiredException("shared global has " + binding.status() + " declaration relationships");
+            var definitions = new LinkedHashMap<Object, VarDecl>();
+            for (var candidate : binding.occurrences()) if (candidate instanceof VarDecl variable) {
+                boolean current = variable.get(NamedDecl.EDITED_ENTITY).isPresent() ? CompilerEntityIdentity.isEditCurrent(variable)
+                        : !variable.hasValue(NamedDecl.USR) || CompilerEntityIdentity.isCurrent(variable);
+                if (!current) throw new RefreshRequiredException("shared global has stale compiler facts");
+                boolean definition = variable.hasValue(NamedDecl.USR) && variable.get(NamedDecl.EDITED_ENTITY).isEmpty()
+                        ? Set.of("definition", "tentative").contains(variable.get(NamedDecl.USR_DEFINITION_KIND))
+                        : DeclarationContext.isGlobalDefinition(variable);
+                if (definition) definitions.putIfAbsent(SourceDeclaration.of(variable).<Object>map(value -> value).orElse(variable), variable);
+            }
+            if (definitions.size() > 1) throw new RefreshRequiredException("shared global has multiple definition sources");
+            // As with get-or-create, an initializer is used only when no compatible definition exists.
+            if (definitions.isEmpty() && initializer != null) {
+                declaration.addChild(initializer);
+                if (!type.isConst()) declaration.set(VarDecl.STORAGE_CLASS, StorageClass.None);
+            }
+            if (owner != null) owner.clearCache();
+            return declaration;
+        } catch (RuntimeException failure) {
+            var parent = declaration.getParent();
+            if (parent instanceof pt.up.fe.specs.clava.ast.stmt.DeclStmt && parent.getNumChildren() == 1) parent.detach();
+            else declaration.detach();
+            if (owner != null) owner.clearCache();
+            throw failure;
         }
-
-        Expr initExpr = isDefined ? null : initValue;
-
-        VarDecl varDecl = tunit.getFactory().varDecl(name, type);
-        varDecl.set(VarDecl.IS_USED, true);
-        varDecl.set(VarDecl.HAS_GLOBAL_STORAGE, true);
-        varDecl.set(NamedDecl.LINKAGE, Linkage.External);
-        if (initExpr != null) {
-            varDecl.setInit(initExpr);
-            // A shared const object needs explicit external linkage in C++.
-            if (type.isConst()) varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
-        } else {
-            varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
-        }
-
-        tunit.addDeclaration(varDecl);
-
-        if (!tunit.getContext().isStackEmpty()) tunit.getApp().clearCache();
-
-        return varDecl;
     }
 }

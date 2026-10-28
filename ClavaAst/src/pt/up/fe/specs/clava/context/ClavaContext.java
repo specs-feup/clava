@@ -26,6 +26,10 @@ import java.io.File;
 import java.util.*;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
+    private final java.util.concurrent.atomic.AtomicLong declarationRevision = new java.util.concurrent.atomic.AtomicLong();
+    public long getDeclarationRevision() { return declarationRevision.get(); }
+    public void declarationsChanged() { declarationRevision.incrementAndGet(); }
+
 
     /// DATAKEYS BEGIN
 

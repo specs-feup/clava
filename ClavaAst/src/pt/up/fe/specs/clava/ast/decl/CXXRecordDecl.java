@@ -98,7 +98,7 @@ public class CXXRecordDecl extends RecordDecl {
         // Adding a method to a different owning class creates a new entity; its old compiler
         // USR cannot describe that entity. The generated declaration/definition pair shares our
         // existing explicit factory identity rules instead.
-        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGenerated(method);
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGeneratedTree(method);
         method.setRecord(this);
 
         var methodDeclaration = method;
@@ -114,11 +114,19 @@ public class CXXRecordDecl extends RecordDecl {
             }
         }
 
-        var identities = new pt.up.fe.specs.clava.utils.DeclarationIdentity();
-        var methodKey = identities.function(methodDeclaration);
-
-        boolean hasDeclaration = getMethods().stream()
-                .anyMatch(candidate -> identities.function(candidate).equals(methodKey));
+        var schema = new pt.up.fe.specs.clava.utils.DeclarationSchema(getContext().isStackEmpty() ? null : getApp());
+        var expected = schema.describe(methodDeclaration);
+        if (!expected.supported()) throw new pt.up.fe.specs.clava.utils.RefreshRequiredException(expected.unsupported());
+        boolean hasDeclaration = false;
+        for (var candidate : getMethods()) {
+            var actual = schema.describe(candidate);
+            if (!actual.symbol().equals(expected.symbol())) continue;
+            if (!actual.supported()) throw new pt.up.fe.specs.clava.utils.RefreshRequiredException(actual.unsupported());
+            if (!actual.selector().equals(expected.selector())) continue;
+            if (schema.compatible(methodDeclaration, candidate) != pt.up.fe.specs.clava.utils.TypeSemantics.Verdict.COMPATIBLE)
+                throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("method declaration is incompatible");
+            hasDeclaration = true;
+        }
 
         if (!hasDeclaration) {
             // Add method

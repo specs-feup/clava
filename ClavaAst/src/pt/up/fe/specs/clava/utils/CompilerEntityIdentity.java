@@ -17,7 +17,7 @@ public final class CompilerEntityIdentity {
                 || declaration.get(NamedDecl.USR).isBlank()) return Optional.empty();
         String domain = "";
         if (declaration.get(NamedDecl.USR_IS_TU_LOCAL)) {
-            domain = DeclarationIdentity.origin(declaration);
+            domain = DeclarationContext.origin(declaration);
             if (domain == null) return Optional.empty();
         }
         String family = declaration instanceof FunctionDecl ? "function"
@@ -40,7 +40,7 @@ public final class CompilerEntityIdentity {
 
     /** Capture a read-only parser batch, sharing immutable type baselines and observations across occurrences. */
     public static void captureAll(java.util.Collection<? extends NamedDecl> declarations) {
-        var identity = new DeclarationIdentity();
+        var identity = new DeclarationState();
         var types = new java.util.IdentityHashMap<pt.up.fe.specs.clava.ast.type.Type,
                 CompilerIdentityState.Observation[]>();
         for (var declaration : declarations) {
@@ -54,6 +54,11 @@ public final class CompilerEntityIdentity {
         return declaration.get(NamedDecl.USR_SOURCE_STATE).map(state -> state instanceof CompilerIdentityState snapshot
                 ? snapshot.isCurrent(declaration) : state.equals(sourceState(declaration)))
                 .orElse(false);
+    }
+
+    public static boolean ownsCapturedState(NamedDecl declaration) {
+        return java.util.stream.Stream.of(declaration.get(NamedDecl.USR_SOURCE_STATE), declaration.get(NamedDecl.EDITED_ENTITY_STATE))
+                .flatMap(Optional::stream).anyMatch(state -> state instanceof CompilerIdentityState snapshot && snapshot.owns(declaration));
     }
 
     public static Object newEditedEntity() { return java.util.UUID.randomUUID(); }
@@ -83,21 +88,11 @@ public final class CompilerEntityIdentity {
             declaration.set(key, null);
     }
 
-    // This is a mutation guard, not a cross-TU matching key. It deliberately retains the existing
-    // conservative type model for generated nodes and rejects parsed edits requiring new compiler analysis.
-    static Object sourceState(NamedDecl declaration) {
-        return sourceState(declaration, new DeclarationIdentity());
+    public static Object sourceState(NamedDecl declaration) {
+        return new DeclarationState().capture(declaration);
     }
 
-    private static Object sourceState(NamedDecl declaration, DeclarationIdentity identity) {
-        if (declaration instanceof FunctionDecl function)
-            return List.of(identity.function(function), identity.type(function.getType()), function.hasBody(),
-                    function.get(FunctionDecl.STORAGE_CLASS), function.get(FunctionDecl.IS_EXPLICIT_TEMPLATE_SPECIALIZATION));
-        if (declaration instanceof TagDecl tag) return List.of(identity.tag(tag), tag.isCompleteDefinition());
-        if (declaration instanceof VarDecl variable)
-            return List.of(identity.variable(variable), identity.type(variable.getType()), variable.hasInit(),
-                    variable.get(VarDecl.STORAGE_CLASS));
-        return List.of(declaration.getDeclName(), declaration.get(NamedDecl.QUALIFIED_PREFIX),
-                declaration.get(NamedDecl.LINKAGE));
+    private static Object sourceState(NamedDecl declaration, DeclarationState state) {
+        return state.capture(declaration);
     }
 }

@@ -14,7 +14,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.utils.DeclarationIdentity;
+import pt.up.fe.specs.clava.utils.DeclarationContext;
 import pt.up.fe.specs.clava.utils.DefinitionResolution;
 
 /** Opt-in probes for limitations outside the approved behavior fixes. */
@@ -89,7 +89,7 @@ class CrossTuLimitationsReviewTest extends CrossTuTestSupport {
     }
 
     private static String describe(FunctionDecl function) {
-        return DeclarationIdentity.origin(function) + " " + body(function).replaceAll("\\s+", " ").trim();
+        return DeclarationContext.origin(function) + " " + body(function).replaceAll("\\s+", " ").trim();
     }
 
     private static String describe(DefinitionResolution<FunctionDecl> resolution) {

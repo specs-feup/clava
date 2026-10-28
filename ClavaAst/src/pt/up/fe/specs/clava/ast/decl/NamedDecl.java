@@ -113,6 +113,10 @@ public abstract class NamedDecl extends Decl {
 
     /** Explicit entity-wide rename. Direct DataKey writes retain their fail-closed stale semantics. */
     public void renameEntity(String name) {
+        if (!hasValue(USR) && get(EDITED_ENTITY).isEmpty() && getParent() == null) {
+            set(DECL_NAME, name);
+            return;
+        }
         var declarations = new ArrayList<NamedDecl>();
         var app = getAppTry();
         app.ifPresent(owner -> declarations.addAll(owner.getEntityOccurrences(this)));
@@ -129,8 +133,15 @@ public abstract class NamedDecl extends Decl {
         }
     }
 
+    protected boolean coordinateSourceEdit() {
+        if (getContext().isStackEmpty() || getApp().isEditingDeclarations()) return false;
+        return pt.up.fe.specs.clava.utils.CompilerEntityIdentity.ownsCapturedState(this)
+                || (!hasValue(USR) && getParent() != null);
+    }
+
     public void setDeclName(String declName) {
-        set(DECL_NAME, declName);
+        if (coordinateSourceEdit()) renameEntity(declName);
+        else set(DECL_NAME, declName);
     }
 
     public boolean hasDeclName() {

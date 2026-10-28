@@ -10,8 +10,9 @@ import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
-import pt.up.fe.specs.clava.utils.DeclarationIdentity;
+import pt.up.fe.specs.clava.utils.DeclarationContext;
 
 class CrossTuIdentityRegressionTest extends CrossTuTestSupport {
     @ParameterizedTest(name = "{displayName} [{arguments}]") @EnumSource(Mode.class)
@@ -129,11 +130,10 @@ class CrossTuIdentityRegressionTest extends CrossTuTestSupport {
                 "impl.cpp", "namespace A{int get(int x){return 11;}} namespace B{int get(int x){return 22;}}"));
         var calls = app.getDescendants(CallExpr.class);
         assertEquals(2, calls.size());
-        var identity = new DeclarationIdentity(app);
         for (var call : calls) {
             var expected = call.getFunctionDecl().orElseThrow();
             var definition = call.getDefinition().orElseThrow();
-            assertEquals(identity.function(expected), identity.function(definition));
+            assertEquals(expected.get(NamedDecl.USR), definition.get(NamedDecl.USR));
             assertEquals("impl.cpp", file(definition));
         }
         assertNotSame(calls.get(0).getDefinition().orElseThrow(), calls.get(1).getDefinition().orElseThrow());
@@ -218,7 +218,7 @@ class CrossTuIdentityRegressionTest extends CrossTuTestSupport {
         var calls = app.getDescendants(CallExpr.class);
         assertEquals(2, calls.size());
         for (var call : calls) {
-            assertEquals(DeclarationIdentity.origin(call), DeclarationIdentity.origin(call.getFunctionDecl().orElseThrow()));
+            assertEquals(DeclarationContext.origin(call), DeclarationContext.origin(call.getFunctionDecl().orElseThrow()));
             assertEquals("api.hpp", call.getDefinition().orElseThrow().getLocation().getFilename());
         }
         assertNotSame(calls.get(0).getFunctionDecl().orElseThrow(), calls.get(1).getFunctionDecl().orElseThrow());

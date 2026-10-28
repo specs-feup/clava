@@ -104,6 +104,18 @@ public class VarDecl extends DeclaratorDecl {
 
     /// DATAKEYS END
 
+    @Override
+    public void setType(Type type) {
+        if (!coordinateSourceEdit()) { super.setType(type); return; }
+        if (this instanceof ParmVarDecl && getParent() instanceof FunctionDecl function) {
+            function.setParamType(function.getParameters().indexOf(this), type);
+            return;
+        }
+        var declarations = getApp().getEntityOccurrences(this);
+        if (declarations.isEmpty()) throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("variable binding is unsupported or stale");
+        getApp().editDeclarations(declarations, declaration -> declaration.set(ValueDecl.TYPE, type));
+    }
+
     public VarDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
@@ -193,6 +205,10 @@ public class VarDecl extends DeclaratorDecl {
     }
 
     public void setInit(Expr expression) {
+        if (coordinateSourceEdit()) {
+            editSource(variable -> variable.setInit((Expr) expression.copy()));
+            return;
+        }
         // If has init, just replace expression
         if (hasInit()) {
             setChild(0, expression);
@@ -205,6 +221,10 @@ public class VarDecl extends DeclaratorDecl {
     }
 
     public void removeInit(boolean removeConst) {
+        if (coordinateSourceEdit()) {
+            editSource(variable -> variable.removeInit(removeConst));
+            return;
+        }
         // If no init, do nothing
         if (!hasInit()) {
             return;
@@ -227,6 +247,18 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
+    /** Initializers belong to a source declaration, not to every extern declaration of its entity. */
+    private void editSource(java.util.function.Consumer<VarDecl> edit) {
+        var app = getApp();
+        var declarations = app.getEntityOccurrences(this);
+        if (declarations.isEmpty()) throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("variable relationships require refresh");
+        var source = pt.up.fe.specs.clava.utils.SourceDeclaration.of(this);
+        app.editDeclarations(declarations, declaration -> {
+            if (declaration instanceof VarDecl variable && (variable == this
+                    || (source.isPresent() && source.equals(pt.up.fe.specs.clava.utils.SourceDeclaration.of(variable))))) edit.accept(variable);
+        });
+    }
+
     /**
      * In most cases, returns this VarDecl. In case of declaration of global variables, returns the VarDecl
      * corresponding to its definition.
@@ -235,11 +267,13 @@ public class VarDecl extends DeclaratorDecl {
      */
     public VarDecl getDefinition() {
         // If no global storage, return itself
-        if (!get(VarDecl.HAS_GLOBAL_STORAGE)) {
+        if (!get(VarDecl.HAS_GLOBAL_STORAGE)
+                && !pt.up.fe.specs.clava.utils.DeclarationContext.isGlobalDefinition(this)
+                && get(STORAGE_CLASS) != StorageClass.Extern) {
             return this;
         }
 
-        if (pt.up.fe.specs.clava.utils.DeclarationIdentity.isGlobalDefinition(this)) return this;
+        if (getContext().isStackEmpty() && pt.up.fe.specs.clava.utils.DeclarationContext.isGlobalDefinition(this)) return this;
         // Block statics still denote themselves; block extern declarations resolve through the application.
         if (getAncestorTry(FunctionDecl.class).isPresent() && get(STORAGE_CLASS) != StorageClass.Extern) return this;
         return getApp().getGlobalVarDefinition(this).orElse(null);

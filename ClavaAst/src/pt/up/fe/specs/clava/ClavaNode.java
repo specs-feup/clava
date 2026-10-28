@@ -151,6 +151,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // Nodes that nobody observes need no counter, including statement trees and parser construction.
         // The first observer (or data-sharing view) enables tracking before retaining its baseline.
         if (identityMutations != null) identityMutations.version++;
+        if (dataI != null && dataI.hasValue(CONTEXT)) dataI.get(CONTEXT).declarationsChanged();
     }
 
     @Override

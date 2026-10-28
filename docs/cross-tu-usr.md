@@ -16,16 +16,14 @@ context, not exposed as duplicate source definitions or emitted into every inclu
    This includes distinct TU-local entities originating in a shared header. Their runtime identities remain
    distinct. Source-level `getCalls()` includes header callers without repeating the same source call per TU.
    A source action either commits all its changes or raises `RefreshRequiredException` and restores the graph.
-3. **Generated-to-parsed matching.** Compatible generated function declarations can find parsed definitions
-   without reparsing when the structural bridge establishes the relationship. Generated nodes do not acquire
+3. **Generated-to-parsed matching.** Compatible generated functions, global variables and forward records can find parsed definitions
+   without reparsing when typed evidence establishes an unambiguous relationship. Generated nodes do not acquire
    fabricated USRs. Unsupported type identity does not bridge; distinct definition sources remain ambiguous.
 
-Two other items are unfinished implementation work, not decisions the user should have to make:
+One transport item remains unfinished implementation work:
 
 - Preserve integral template argument type/width in the transport and generated source. The existing loss can
   change `template<auto>` code on a round trip even though USRs distinguish the parsed entities.
-- Replace the remaining Java compatibility/mutation model as stronger compiler facts become available. Its
-  supported subset must remain explicit; a missing implementation is not a new language rule.
 
 The local-only build, compiler identity workarounds, cache namespace, and explicit decoder errors are implementation
 facts. USRs also cannot provide final executable membership/linker selection or rerun C++ semantic analysis after
@@ -98,7 +96,7 @@ Raw USRs are useful compiler data, but not an infallible equivalence oracle. Nat
 - Function USRs omit a noexcept distinction inside function-pointer overload parameters. The compiler linkage name disambiguates those overloads.
 - Namespace spelling can remain in C-language-linkage USRs across TUs. C-linkage functions and variables therefore use the compiler's linkage name within the appropriate entity family and TU domain.
 
-No USR text is parsed, and failed generation never falls back to a source name or location. Template entities use their compiler USRs; the non-template linkage-alias rule is not applied to primary templates or specializations. Compatibility checks reject inconsistent function signatures and variable types. The prior conservative Java type model remains for compatibility, mutation detection, and factory-created declarations; it no longer establishes identity between parsed entities.
+No USR text is parsed, and failed generation never falls back to a source name or location. Template entities use their compiler USRs; the non-template linkage-alias rule is not applied to primary templates or specializations. Compatibility checks reject inconsistent function signatures and variable types. The former `DeclarationIdentity` structural matcher has been deleted. Native compiler identities, transformation identities, mutation baselines, and typed binding proofs now have separate responsibilities.
 
 ## Lookup results
 
@@ -138,8 +136,8 @@ checks that edited signatures have compatible caller arities after those steps. 
 in a body requires an explicit body update; an unsafe source action restores its original graph. The modified-file output filter includes files changed indirectly by these coordinated actions.
 
 The joinpoint rename adapter also updates record/global occurrences together. Clones are new generated entities
-and discard the original compiler identity. A generated function declaration may bridge to a compatible parsed
-entity; unsupported structural types cannot establish a bridge. Parsed generation failures never use this fallback.
+and discard the original compiler identity. Generated functions, objects and forward records may bind to compatible parsed
+entities; unsupported types cannot establish a binding proof. Parsed generation failures never use this fallback.
 
 The source transaction checks original files against their parse-time snapshots. If a source changed on disk,
 contexts require incompatible source edits, source owners overlap, or token/preprocessing mappings cannot be
@@ -149,6 +147,34 @@ references and member names before returning the failure. No partial header outp
 These are coordinated source transformations. They do not rerun compiler overload resolution, template
 instantiation or arbitrary expression semantics. That boundary remains explicit rather than silently replacing
 compiler facts with name matching.
+
+## Binding after AST API edits
+
+`PostEditBindings` first selects candidates by declaration family, lexical scope, language linkage and
+TU/local/module domain. That selection is not an identity. `DeclarationSchema` separates overload selection
+from compatibility: a different return type conflicts rather than creating an overload. `TypeSemantics`
+compares typed data, never emitted type text, and never uses an unknown type's Java object identity as proof.
+It handles alias desugaring, parameter cv/array/function adjustments, pointers and references, full-precision
+array bounds, nominal records/enums, member pointers, calling conventions, exception specifications, and
+supported template parameter types. New template-function bindings require compiler constraint/specialization
+evidence and currently return `UNSUPPORTED`; existing compiler relationships and coordinated template edits remain usable. Address spaces and nested qualifiers remain significant. Missing transport
+information yields `UNSUPPORTED`; a proof cannot repair omitted template integral width/type data.
+
+Native declarations retain compiler identity. A managed action preserves its explicit entity cohort and
+coordinates source peers. Dependent signatures are recaptured when a managed nominal rename changes them.
+Generated declarations join that cohort only after an unambiguous compatibility proof. A name collision
+remains diagnosable and can be repaired without editing the unrelated entity. Body and initializer actions
+update their physical source peers; prototypes and extern declarations do not acquire definitions.
+
+AST insertion, removal and normal setters advance a context revision, rebuilding the inventory automatically.
+Exposed mutable type lists are rechecked without trusting that revision. Temporary inferred candidate lists
+are never retained as permanent cache keys. `GlobalManager` inspects the live App, checks types and conflicts,
+and rolls back rejected insertions; it no longer remembers only global names across edits or removed TUs.
+
+These rules preserve source transformation relationships. They do not prove expression validity or rerun C++
+lookup after arbitrary changes; emitted-code compiler tests are an independent check of supported histories.
+Parameter adjustment follows the [C++ function declaration rules](https://eel.is/c++draft/dcl.fct), and scope
+and linkage separation follows [basic.link](https://eel.is/c++draft/basic.link).
 
 ## Validation cost
 
@@ -163,7 +189,7 @@ The parser captures compiler declarations as a read-only batch, sharing immutabl
 observations across occurrences. This sharing ends with capture; validation after an edit collects fresh state.
 The index caches compiler keys, physical source ownership and sorted definition candidates, checks candidate
 state before reuse, and leaves factory-created declaration keys dynamic. Physical paths are canonicalized once
-per capture/index pass; structural bridging is built lazily when generated functions need it. None of these caches stores a cross-TU definition in a native dump.
+per capture/index pass; typed binding proofs are constructed when an adapted declaration needs them. None of these caches stores a cross-TU definition in a native dump.
 
 ## Caching and tests
 
@@ -177,13 +203,33 @@ The ccache tests check real hit counters and resolved results for warm dumps, mi
 
 ## Validation of this implementation
 
+The paired pre-USR comparison uses Clava `26cbb49db9fc75745098a5899dcaae5f2d2b6779` and matching
+local native builds with the same LLVM 18.1.8 configuration. Three fresh JVM forks alternate variant order,
+with 12 warmups and 15 measured samples each. Warm parse/cache counters and every resolved call are checked.
+
+| Fixture | Pre-USR warm parse through lookup | Current | Overhead |
+|---|---:|---:|---:|
+| 4 TUs / 128 queries | 71.1 ms | 74.0 ms | +4.1% |
+| 16 TUs / shared header / 512 queries | 396.5 ms | 453.3 ms | +14.3% |
+
+The rewrite improves the post-edit contract; these fixtures do not show an end-to-end speedup. For the shared
+header fixture, index construction plus first lookup costs 19.9 ms versus 1.4 ms, and the checked lookup batch
+costs 9.4 ms versus 1.1 ms. The USR implementation indexes retained occurrences and validates mutation state;
+the old implementation did not do that work. The phase measurements do not isolate each feature's causal cost.
+Raw native dumping costs 9.5%/23.5% more on the two fixtures; emitted dumps are 14.5%/19.7% larger.
+Raw decoding costs about 6% more. These are synthetic local measurements, not a whole-project guarantee.
+The local `ClangAstParser/build/post-edit-performance/` artifact retains the detailed report, raw samples,
+cache counters, source manifest, fixtures, driver and exact executed orchestration. It is not a published asset.
+
 The native implementation is committed locally as `b29bf01` in clang-dumper. The standalone and plugin corpus
 runs each pass 153 cases, with 7 platform/requirement skips. These native counts come from the initial USR
 implementation; the Java-only optimization does not change the producer.
 
-Clava's full parser run passes 714 tests, with 7 existing conditional/review skips. This includes all 65 new
-source-ownership cases, covering both TU orders and serial/parallel parsing. The output regressions compile
-generated source files with an independent C++ compiler. The ClavaWeaver distribution builds against the local
+Clava's full parser run passes 850 tests, with 7 existing conditional/review skips. This includes 143 new
+post-edit cases and the previous 65 source-ownership cases. The deleted structural matcher's seven unit cases
+are replaced by the new binding/type-proof suites. Fixtures cover both TU orders and serial/parallel parsing. The output regressions compile
+generated source files with an independent C++ compiler. The new histories also link and execute generated
+programs; 28 function-type pairs are checked against independent `g++`/`std::is_same` assertions. The ClavaWeaver distribution builds against the local
 schema, and TypeScript compilation passes.
 
 The JavaScript integration run passes 168 tests with 3 skips when selecting

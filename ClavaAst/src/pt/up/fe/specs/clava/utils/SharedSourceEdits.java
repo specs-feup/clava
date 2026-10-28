@@ -33,7 +33,7 @@ public final class SharedSourceEdits {
         }
         for (var node : roots()) sourceResolver.of(node).ifPresent(source -> {
             originals.computeIfAbsent(source.file(), SharedSourceEdits::read);
-            sourceUsers.computeIfAbsent(source.file(), ignored -> new HashSet<>()).add(DeclarationIdentity.origin(node));
+            sourceUsers.computeIfAbsent(source.file(), ignored -> new HashSet<>()).add(DeclarationContext.origin(node));
         });
     }
 
