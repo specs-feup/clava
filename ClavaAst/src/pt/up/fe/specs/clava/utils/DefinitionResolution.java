@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 /** An inspectable lookup result; conflicting definitions are different from an absent definition. */
-public record DefinitionResolution<T>(Kind kind, List<T> candidates) {
+public record DefinitionResolution<T>(Kind kind, List<T> candidates, List<T> contextualDefinitions) {
+    public DefinitionResolution(Kind kind, List<T> candidates) { this(kind, candidates, candidates); }
     public enum Kind { MISSING, UNIQUE, AMBIGUOUS, UNSUPPORTED, STALE, INCOMPATIBLE }
     public DefinitionResolution {
         java.util.Objects.requireNonNull(kind);
         candidates = List.copyOf(candidates);
+        contextualDefinitions = List.copyOf(contextualDefinitions);
         if (((kind == Kind.MISSING || kind == Kind.UNSUPPORTED || kind == Kind.STALE) && !candidates.isEmpty()) || (kind == Kind.UNIQUE && candidates.size() != 1)
                 || (kind == Kind.AMBIGUOUS && candidates.size() < 2)
                 || (kind == Kind.INCOMPATIBLE && candidates.isEmpty()))

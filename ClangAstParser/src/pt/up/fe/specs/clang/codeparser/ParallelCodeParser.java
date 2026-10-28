@@ -271,6 +271,8 @@ public class ParallelCodeParser extends CodeParser {
         // Applies passes related with text elements
         new TreeTransformer(ClangAstParser.getTextParsingRules()).transform(app);
 
+        app.captureSharedSources();
+
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
             String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));

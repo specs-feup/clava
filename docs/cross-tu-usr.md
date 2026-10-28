@@ -4,19 +4,21 @@ This experiment uses an unpublished local clang-dumper build. No release tag or 
 
 ## Behavior decisions
 
-The first implementation mixed technical limits with behavior choices that had not been agreed. The following
-requirements now supersede the corresponding experimental restrictions. The runtime changes remain to be implemented.
+The physical source declaration is the source-level truth. Compiler analysis occurrences are retained as internal
+context, not exposed as duplicate source definitions or emitted into every including file.
 
-1. **Repeated header definitions: pending.** The current implementation reports multiple occurrences as
-   `AMBIGUOUS`, even for ordinary inline functions. The proposed behavior is to return the querying TU's
-   compiler-selected occurrence and expose project conflicts separately. This choice remains open.
-2. **Shared-source edits: agreed.** One action must coordinate all occurrences of the physical source and their
-   affected uses, including distinct TU-local entities originating in a shared header. The user should not have to
-   repair callers or repeat the action per TU. If safe coordination requires compiler refresh, report that need
-   explicitly instead of leaving a partially updated program.
-3. **Generated-to-parsed matching: agreed.** Preserve matching from a newly generated declaration to an existing
-   compatible parsed definition without reparsing when the match is unambiguous. A separate generated identity
-   must not disable this workflow. Ambiguous or unsupported relationships must remain explicit.
+1. **Header definition lookup.** Multiple supported occurrences of the same declaration range in the same
+   canonical source file resolve to one header definition. An explicitly selected editable header supplies the
+   representative when available; otherwise a stable retained header occurrence represents it.
+   `DefinitionResolution.contextualDefinitions()` exposes all compiler views separately. Different physical
+   definitions remain separate candidates, even when their source text or basenames match.
+2. **Shared-source edits.** One action coordinates physical-source peers, related declarations, and affected uses.
+   This includes distinct TU-local entities originating in a shared header. Their runtime identities remain
+   distinct. Source-level `getCalls()` includes header callers without repeating the same source call per TU.
+   A source action either commits all its changes or raises `RefreshRequiredException` and restores the graph.
+3. **Generated-to-parsed matching.** Compatible generated function declarations can find parsed definitions
+   without reparsing when the structural bridge establishes the relationship. Generated nodes do not acquire
+   fabricated USRs. Unsupported type identity does not bridge; distinct definition sources remain ambiguous.
 
 Two other items are unfinished implementation work, not decisions the user should have to make:
 
@@ -76,10 +78,13 @@ children to emit into each including `.cpp`. `TranslationUnit.getCode()` emits t
 and `App.getCode(destination)` emits the selected file trees. Retaining another analysis occurrence does not
 create another output definition.
 
-To regenerate a header from its AST, the header needs its own selected editable file tree. Merely including it
-from a parsed source file does not make Clava emit a modified header automatically. Coordinated header editing
-must therefore connect analysis occurrences to the owning output file as well as update callers. This is part of
-the agreed shared-source edit requirement, not something a definition lookup result alone can accomplish.
+An explicitly selected header is generated through its file tree. A changed included-only header is emitted once
+by `App.getCode(destination)`/`App.write(destination)`. The source coordinator stages token-aligned changes to
+its original text, retaining surrounding declarations, comments, preprocessing and macro spelling. The including
+source files retain their includes and calls. Leading preprocessing in including files is preserved when needed
+for the edited header; unsupported conditional or token mappings require refresh instead of choosing a TU's
+expanded body. Output paths follow configured source-folder mappings, with the common source root used for otherwise flattened
+inputs. Conflicting output mappings and collisions are errors.
 
 The intended source layout keeps a header-defined inline function in its header and keeps includes/calls in the
 source files. The later compiler chooses machine-code inlining; C++ `inline` does not guarantee substitution.
@@ -99,14 +104,19 @@ No USR text is parsed, and failed generation never falls back to a source name o
 
 Function, tag, and global-variable resolution exposes immutable candidate lists and these states:
 
-- `UNIQUE`: exactly one supported compatible definition occurrence.
+- `UNIQUE`: exactly one supported compatible physical source definition.
 - `MISSING`: no definition in the selected analysis group.
-- `AMBIGUOUS`: multiple definition occurrences; all candidates remain available.
+- `AMBIGUOUS`: multiple physical source definitions; all candidates remain available.
 - `UNSUPPORTED`: compiler entity identity cannot be established.
 - `INCOMPATIBLE`: an entity bucket contains definitions incompatible with the query.
 - `STALE`: identity-relevant edits invalidated compiler metadata.
 
-Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal ambiguity or stale metadata by returning itself as a fallback. Same-location header definitions remain separate and ambiguous, including apparently identical inline definitions. Establishing safe equivalence across preprocessing configurations is future work; equal USRs and source coordinates do not prove the ODR. This is the current implementation's unresolved lookup policy, not an agreed product requirement; see the pending decision above.
+Optional lookup adapters return a value only for `UNIQUE`. A parsed function with a body cannot conceal a
+conflict between distinct source definitions or stale metadata by returning itself as a fallback. Repeated header
+analysis occurrences share one source candidate. This is source ownership, not an ODR-equivalence proof:
+macro-dependent bodies, types and bindings remain available through `contextualDefinitions()`. A stale context
+cannot be hidden by selecting another representative. Macro-generated declarations without a unique source
+owner are not merged by guessed locations.
 
 Repeated C tentative definitions within one TU can yield to that TU's full definition. Tentative definitions across TUs remain ambiguous; this is not an implementation of platform common-symbol/linker policies.
 
@@ -116,11 +126,29 @@ Written explicit function specializations survive the source-tree cleanup pass a
 
 The parser snapshots identity-relevant state before returning its graphs. The index checks query/candidate state before answering; direct name, signature, storage, or type changes fail closed, including when a cache generation already exists. `App.clearCache()` rebuilds Java indexes but does not rerun Clang or bless an edited compiler USR. Clearing the cache cannot make stale facts current.
 
-Supported entity-wide function edits maintain declaration relationships through a separate transformation-owned identity. Rename, parameter, parameter-type, and return-type operations first collect all current entity occurrences, update them, assign an explicit edit identity, and invalidate the index. Original USRs and compiler snapshots remain historical. A later raw mutation still reports `STALE`. These operations can rename all occurrences of a conflicting entity without choosing one definition; definition lookup remains `AMBIGUOUS`. Unsupported, incompatible, or stale relationships cannot be silently adopted by an edit.
+Supported function rename, parameter, parameter-type, return-type and body actions collect a closure over both
+compiler entities and physical source ownership. Edits assign transformation-owned identities per semantic entity,
+so distinct static-header entities remain distinct while their shared source is updated together. Original USRs
+remain historical; a later raw identity mutation still reports `STALE`.
 
-The joinpoint rename adapter also updates record/global occurrences together. Clones are new generated entities and discard the original compiler identity. Cloning inserts prototypes only where an editable parent exists; retained header declarations are not insertion points. Adding a method to a different owning class also creates generated identity.
+Parameter replacement rebinds body references to the new parameter objects. Parameter-type changes copy the
+signature list rather than mutating another declaration's shared type. Method renames update stored member
+reference names as well as declaration names. Parameter and caller changes may be staged in the order existing Clava transformations use. Source emission
+checks that edited signatures have compatible caller arities after those steps. Removing a parameter still used
+in a body requires an explicit body update; an unsafe source action restores its original graph. The modified-file output filter includes files changed indirectly by these coordinated actions.
 
-Factory-created declarations use a separate identity domain. They cannot acquire a parsed entity identity by matching its spelling. Explicit binding of independently generated declarations to existing parsed entities remains future work. Arbitrary edits still do not rerun overload resolution, template instantiation, or name lookup. The mutation guard uses the existing supported type model, not a complete C++ semantic invalidation engine; direct mutation outside that model is not a compiler-validity guarantee. A physical shared-header edit can affect several distinct TU-local entities. Entity-wide editing does not itself synchronize those separate entities or refresh all dependent expressions.
+The joinpoint rename adapter also updates record/global occurrences together. Clones are new generated entities
+and discard the original compiler identity. A generated function declaration may bridge to a compatible parsed
+entity; unsupported structural types cannot establish a bridge. Parsed generation failures never use this fallback.
+
+The source transaction checks original files against their parse-time snapshots. If a source changed on disk,
+contexts require incompatible source edits, source owners overlap, or token/preprocessing mappings cannot be
+preserved, it raises `RefreshRequiredException`. It restores original declaration data, child objects, parameter
+references and member names before returning the failure. No partial header output is staged.
+
+These are coordinated source transformations. They do not rerun compiler overload resolution, template
+instantiation or arbitrary expression semantics. That boundary remains explicit rather than silently replacing
+compiler facts with name matching.
 
 ## Validation cost
 
@@ -133,14 +161,17 @@ parser construction do not allocate counters.
 
 The parser captures compiler declarations as a read-only batch, sharing immutable type baselines and dependency
 observations across occurrences. This sharing ends with capture; validation after an edit collects fresh state.
-The index caches compiler keys and sorted definition candidates, checks candidate state before reuse, and leaves
-factory-created declaration keys dynamic. None of these caches stores a cross-TU definition in a native dump.
+The index caches compiler keys, physical source ownership and sorted definition candidates, checks candidate
+state before reuse, and leaves factory-created declaration keys dynamic. Physical paths are canonicalized once
+per capture/index pass; structural bridging is built lazily when generated functions need it. None of these caches stores a cross-TU definition in a native dump.
 
 ## Caching and tests
 
 Schema changes select a new schema-hash cache namespace. Reader node-ID scopes are assigned after loading a dump; a TU's numeric position in the App is no longer sent as a changing native argument. Adding or reordering another TU therefore does not invalidate an unchanged dump solely because its position changed.
 
-The tests use actual source projects, both TU orders and serial/parallel parsing. They assert every requested TU survives parsing. New coverage includes raw USR transport, exact reference ownership, included declarations, all conflict candidates, failed metadata, stale edits, C linkage, noexcept overloads, top-level cv, typed integral template identities, explicit specializations, compiler-checked code generation/reparsing, tentative globals, and removal of TU-owned definitions.
+The tests use actual source projects, both TU orders and serial/parallel parsing. They assert every requested TU survives parsing. New coverage includes raw USR transport, exact reference ownership, included declarations, all conflict candidates, failed metadata, stale edits, C linkage, noexcept overloads, top-level cv, typed integral template identities, explicit specializations, compiler-checked code generation/reparsing, tentative globals, and removal of TU-owned definitions. Source-ownership coverage checks inline/static headers, macro-dependent
+contexts, template instantiations, selected and retained-only headers, dependent member callers, staged caller
+updates, generated declarations, rollback, disk changes, and configured output paths.
 
 The ccache tests check real hit counters and resolved results for warm dumps, mixed cached/fresh dumps, changed shared headers, compile-flag changes, TU addition/removal, and relocation of TU-local entities. Warm-lookup regressions also exercise nested type edits, in-place parameter/qualifier lists, mutable exception/language data, raw child lists, shared views, independent copies, equivalent edits followed by real changes, metadata failure, and changed TU provenance. They do not reset shared cache statistics or delete shared installations. Native corpus validation runs the standalone and plugin producers against the same wire verifier.
 
@@ -150,11 +181,12 @@ The native implementation is committed locally as `b29bf01` in clang-dumper. The
 runs each pass 153 cases, with 7 platform/requirement skips. These native counts come from the initial USR
 implementation; the Java-only optimization does not change the producer.
 
-Clava's optimized full parser run passes 645 tests, with 7 existing conditional/review skips. This includes 16
-additional warm-lookup validation cases. The ClavaWeaver distribution builds against the local schema, and
-TypeScript compilation passes.
+Clava's full parser run passes 714 tests, with 7 existing conditional/review skips. This includes all 65 new
+source-ownership cases, covering both TU orders and serial/parallel parsing. The output regressions compile
+generated source files with an independent C++ compiler. The ClavaWeaver distribution builds against the local
+schema, and TypeScript compilation passes.
 
-The JavaScript integration run passes 165 tests with 3 skips when selecting
+The JavaScript integration run passes 168 tests with 3 skips when selecting
 `--testNamePattern='^(?!.*OmpThreadsExplore)'`. Two skips already exist; the third explicitly excludes the
 OpenMP fixture because this local system has no compatible `omp.h`. The unrestricted run exposes that missing
 header. These runs use the experiment init script, which disables JaCoCo instrumentation/aggregate coverage

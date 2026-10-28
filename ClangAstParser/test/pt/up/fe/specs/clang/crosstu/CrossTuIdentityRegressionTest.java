@@ -218,7 +218,8 @@ class CrossTuIdentityRegressionTest extends CrossTuTestSupport {
         var calls = app.getDescendants(CallExpr.class);
         assertEquals(2, calls.size());
         for (var call : calls) {
-            assertEquals(DeclarationIdentity.origin(call), DeclarationIdentity.origin(call.getDefinition().orElseThrow()));
+            assertEquals(DeclarationIdentity.origin(call), DeclarationIdentity.origin(call.getFunctionDecl().orElseThrow()));
+            assertEquals("api.hpp", call.getDefinition().orElseThrow().getLocation().getFilename());
         }
         assertNotSame(calls.get(0).getFunctionDecl().orElseThrow(), calls.get(1).getFunctionDecl().orElseThrow());
     }

@@ -69,6 +69,11 @@ public final class CompilerEntityIdentity {
                 .orElse(false);
     }
 
+    public static void makeGeneratedTree(pt.up.fe.specs.clava.ClavaNode node) {
+        node.getDescendantsAndSelfStream().filter(NamedDecl.class::isInstance).map(NamedDecl.class::cast)
+                .forEach(CompilerEntityIdentity::makeGenerated);
+    }
+
     /** A newly created declaration must not inherit the source entity's compiler identity. */
     public static void makeGenerated(NamedDecl declaration) {
         for (var key : List.of(NamedDecl.USR, NamedDecl.USR_GENERATION_FAILED, NamedDecl.USR_IS_TU_LOCAL,

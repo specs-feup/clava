@@ -81,6 +81,25 @@ public final class DeclarationIdentity {
                 templateParameters(function), arguments(function.get(FunctionDecl.TEMPLATE_ARGUMENTS)));
     }
 
+    /** Structural bridging is allowed only where this model can establish type compatibility. */
+    public boolean supportsGeneratedBinding(FunctionDecl function) {
+        return supported(function(function)) && supported(type(function.getType()));
+    }
+
+    private static boolean supported(Object value) {
+        if (value instanceof ObjectIdentity) return false;
+        if (value instanceof TypeKey type)
+            return !type.kind().startsWith("unsupported") && !type.kind().startsWith("unresolved")
+                    && !type.kind().equals("recursive") && supported(type.components());
+        if (value instanceof FunctionKey function)
+            return supported(function.name()) && supported(function.parameters())
+                    && supported(function.templateParameters()) && supported(function.templateArguments());
+        if (value instanceof TagKey tag) return supported(tag.name()) && supported(tag.arguments());
+        if (value instanceof Name name) return supported(name.domain());
+        if (value instanceof List<?> list) return list.stream().allMatch(DeclarationIdentity::supported);
+        return true;
+    }
+
     public TagKey tag(TagDecl tag) {
         return new TagKey(name(tag), tag instanceof EnumDecl ? "enum"
                 : tag.get(TagDecl.TAG_KIND).name().equalsIgnoreCase("union") ? "union" : "record",

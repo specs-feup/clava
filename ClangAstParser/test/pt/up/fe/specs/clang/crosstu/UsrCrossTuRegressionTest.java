@@ -78,11 +78,14 @@ class UsrCrossTuRegressionTest extends CrossTuTestSupport {
         var second = calls.get(1).get(CallExpr.DIRECT_CALLEE).orElseThrow();
         assertTrue(first.get(NamedDecl.USR_IS_TU_LOCAL));
         assertNotEquals(CompilerEntityIdentity.key(first), CompilerEntityIdentity.key(second));
-        for (var call : calls) assertSame(call.get(CallExpr.DIRECT_CALLEE).orElseThrow(), call.getDefinition().orElseThrow());
+        for (var call : calls) {
+            assertSame(calls.get(0).getDefinition().orElseThrow(), call.getDefinition().orElseThrow());
+            assertEquals("api.hpp", call.getDefinition().orElseThrow().getLocation().getFilename());
+        }
     }
 
     @ParameterizedTest @EnumSource(Mode.class)
-    void macroConfiguredHeaderDefinitionsAreAmbiguous(Mode mode) throws Exception {
+    void macroConfiguredHeaderDefinitionsHaveOneSourceAndInspectableContexts(Mode mode) throws Exception {
         var app = parse(mode, sources("api.hpp", "inline int target(){return VALUE;}",
                 "a.cpp", "#define VALUE 1\n#include \"api.hpp\"\nint a(){return target();}",
                 "b.cpp", "#define VALUE 2\n#include \"api.hpp\"\nint b(){return target();}"));
@@ -92,21 +95,24 @@ class UsrCrossTuRegressionTest extends CrossTuTestSupport {
         assertEquals(first.get(NamedDecl.USR), second.get(NamedDecl.USR));
         assertNotEquals(first.getBody().orElseThrow().getCode(), second.getBody().orElseThrow().getCode());
         for (var call : calls) {
-            assertEquals(Kind.AMBIGUOUS, app.getFunctionDefinitionResolution(call.getFunctionDecl().orElseThrow()).kind());
-            assertTrue(call.getDefinition().isEmpty());
+            var resolution = app.getFunctionDefinitionResolution(call.getFunctionDecl().orElseThrow());
+            assertEquals(Kind.UNIQUE, resolution.kind());
+            assertEquals(2, resolution.contextualDefinitions().size());
+            assertTrue(call.getDefinition().isPresent());
         }
     }
 
     @ParameterizedTest @EnumSource(Mode.class)
-    void repeatedHeaderDefinitionsRemainSeparateUntilEquivalenceIsEstablished(Mode mode) throws Exception {
+    void repeatedHeaderDefinitionsResolveToOnePhysicalSource(Mode mode) throws Exception {
         var app = parse(mode, sources("api.hpp", "inline int target(){return 7;}",
                 "a.cpp", "#include \"api.hpp\"\nint a(){return target();}",
                 "b.cpp", "#include \"api.hpp\"\nint b(){return target();}"));
         var call = app.getDescendants(CallExpr.class).get(0);
         var resolution = app.getFunctionDefinitionResolution(call.getFunctionDecl().orElseThrow());
-        assertEquals(Kind.AMBIGUOUS, resolution.kind());
-        assertEquals(2, resolution.candidates().size());
-        assertNotSame(resolution.candidates().get(0), resolution.candidates().get(1));
+        assertEquals(Kind.UNIQUE, resolution.kind());
+        assertEquals(1, resolution.candidates().size());
+        assertEquals(2, resolution.contextualDefinitions().size());
+        assertNotSame(resolution.contextualDefinitions().get(0), resolution.contextualDefinitions().get(1));
     }
 
     @ParameterizedTest @EnumSource(Mode.class)
@@ -188,12 +194,13 @@ class UsrCrossTuRegressionTest extends CrossTuTestSupport {
     }
 
     @ParameterizedTest @EnumSource(Mode.class)
-    void generatedDeclarationsDoNotAcquireAParsedIdentityBySpelling(Mode mode) throws Exception {
+    void generatedDeclarationsCanMatchAnUnambiguousParsedDefinition(Mode mode) throws Exception {
         var app = parse(mode, sources("impl.cpp", "int target(){return 7;}"));
         var generated = app.getFactory().functionDecl("target", function(app, "target", "impl.cpp").getFunctionType());
         app.getTranslationUnits().get(0).addChild(generated);
         app.clearCache();
-        assertEquals(Kind.MISSING, app.getFunctionDefinitionResolution(generated).kind());
+        assertEquals(Kind.UNIQUE, app.getFunctionDefinitionResolution(generated).kind());
+        assertFalse(generated.hasValue(NamedDecl.USR));
     }
 
     @ParameterizedTest @EnumSource(Mode.class)

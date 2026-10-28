@@ -14,6 +14,13 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
  */
 public class DeclarationsCache {
     private final DeclarationIdentity generatedIdentity;
+    private final App app;
+    private final SourceDeclaration.Resolver sourceResolver = new SourceDeclaration.Resolver();
+    private final Map<SourceDeclaration, List<NamedDecl>> sourceOccurrences = new HashMap<>();
+    private final IdentityHashMap<NamedDecl, SourceDeclaration> sourceKeys = new IdentityHashMap<>();
+    private final Map<SourceDeclaration, NamedDecl> sourceOwners = new HashMap<>();
+    private final List<FunctionDecl> generatedFunctions = new ArrayList<>();
+    private Map<Object, List<FunctionDecl>> structuralFunctions;
     private final Map<Object, List<FunctionDecl>> functions = new HashMap<>();
     private record FunctionLinkageAlias(String name, String translationUnit) {}
     private record CachedKey(long version, Object value) {}
@@ -32,6 +39,7 @@ public class DeclarationsCache {
     private final Set<NamedDecl> indexed = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public DeclarationsCache(App app) {
+        this.app = app;
         generatedIdentity = new DeclarationIdentity(app);
         app.getDescendantsStream().filter(NamedDecl.class::isInstance).map(NamedDecl.class::cast)
                 .forEach(this::add);
@@ -68,6 +76,12 @@ public class DeclarationsCache {
 
     private void add(NamedDecl declaration) {
         if (!indexed.add(declaration)) return;
+        sourceResolver.of(declaration).ifPresent(source -> {
+            sourceKeys.put(declaration, source);
+            add(sourceOccurrences, source, declaration);
+        });
+        if (declaration instanceof FunctionDecl function && !declaration.hasValue(NamedDecl.USR))
+            generatedFunctions.add(function);
         Object key = key(declaration);
         if (key == null) return;
         if (declaration instanceof FunctionDecl function) add(functions, key, function);
@@ -75,12 +89,40 @@ public class DeclarationsCache {
         else if (declaration instanceof VarDecl variable) add(variables, key, variable);
     }
 
-    private static <T> void add(Map<Object, List<T>> map, Object key, T node) {
+    private static <K, T> void add(Map<K, List<T>> map, K key, T node) {
         map.computeIfAbsent(key, ignored -> new ArrayList<>()).add(node);
     }
 
     private List<FunctionDecl> functionOccurrences(FunctionDecl function) {
-        return functions.getOrDefault(key(function), List.of());
+        var own = functions.getOrDefault(key(function), List.of());
+        if (function.hasValue(NamedDecl.USR) && generatedFunctions.isEmpty()) return own;
+        var bridgeIdentity = new DeclarationIdentity(app);
+        if (!bridgeIdentity.supportsGeneratedBinding(function)) return own;
+        var structuralKey = bridgeIdentity.function(function);
+        var result = new ArrayList<>(own);
+        if (!function.hasValue(NamedDecl.USR)) {
+            if (structuralFunctions == null) {
+                structuralFunctions = new HashMap<>();
+                var identity = new DeclarationIdentity(app);
+                for (var entry : functions.values()) for (var parsed : entry)
+                    if (parsed.hasValue(NamedDecl.USR) && identity.supportsGeneratedBinding(parsed))
+                        add(structuralFunctions, identity.function(parsed), parsed);
+            }
+            for (var parsed : structuralFunctions.getOrDefault(structuralKey, List.of()))
+                if (!result.contains(parsed)) result.add(parsed);
+        }
+        for (var generated : generatedFunctions)
+            if (!result.contains(generated) && bridgeIdentity.supportsGeneratedBinding(generated)
+                    && structuralKey.equals(new DeclarationIdentity(app).function(generated)))
+                result.add(generated);
+        return result;
+    }
+
+    private List<? extends NamedDecl> entityOccurrences(NamedDecl query) {
+        if (query instanceof FunctionDecl function) return functionOccurrences(function);
+        if (query instanceof TagDecl) return tags.getOrDefault(key(query), List.of());
+        if (query instanceof VarDecl) return variables.getOrDefault(key(query), List.of());
+        return List.of(query);
     }
 
     private boolean current(NamedDecl declaration) {
@@ -90,20 +132,76 @@ public class DeclarationsCache {
 
     public List<NamedDecl> getEntityOccurrences(NamedDecl query) {
         if (!current(query) || key(query) == null) return List.of();
-        List<? extends NamedDecl> occurrences;
-        if (query instanceof FunctionDecl function) occurrences = functionOccurrences(function);
-        else if (query instanceof TagDecl) occurrences = tags.getOrDefault(key(query), List.of());
-        else if (query instanceof VarDecl) occurrences = variables.getOrDefault(key(query), List.of());
-        else return List.of(query);
-        if (occurrences.stream().anyMatch(candidate -> !current(candidate))) return List.of();
-        return occurrences.stream().map(NamedDecl.class::cast).toList();
+        // Follow both semantic relationships and physical-source relationships to a fixed point.
+        // A static header function has separate entities but one source action must update them all.
+        var seen = Collections.newSetFromMap(new IdentityHashMap<NamedDecl, Boolean>());
+        var pending = new ArrayDeque<NamedDecl>();
+        pending.add(query);
+        var result = new ArrayList<NamedDecl>();
+        while (!pending.isEmpty()) {
+            var next = pending.removeFirst();
+            if (!seen.add(next)) continue;
+            if (!current(next) || key(next) == null) return List.of();
+            result.add(next);
+            for (var occurrence : entityOccurrences(next)) if (!seen.contains(occurrence)) pending.add(occurrence);
+            Optional.ofNullable(sourceKeys.get(next)).ifPresent(source -> {
+                for (var occurrence : sourceOccurrences.getOrDefault(source, List.of()))
+                    if (!seen.contains(occurrence)) pending.add(occurrence);
+            });
+        }
+        return List.copyOf(result);
+    }
+
+    /** Preserve distinct TU-local semantic entities while coordinating their common source edit. */
+    public Map<NamedDecl, Object> editIdentities(List<? extends NamedDecl> declarations) {
+        var identities = new HashMap<Object, Object>();
+        var result = new IdentityHashMap<NamedDecl, Object>();
+        for (var declaration : declarations) {
+            Object key = key(declaration);
+            if (!declaration.hasValue(NamedDecl.USR) && declaration instanceof FunctionDecl function) {
+                var matches = functionOccurrences(function).stream().filter(f -> f.hasValue(NamedDecl.USR)).toList();
+                if (matches.stream().anyMatch(candidate -> !current(candidate) || !compatibleType(function, candidate)
+                        || !generatedIdentity.compatibleFunctions(function, candidate)))
+                    throw new RefreshRequiredException("generated declaration has incompatible or stale parsed matches");
+                var parsed = matches.stream().map(this::key).distinct().toList();
+                if (parsed.size() > 1) throw new IllegalStateException("Refresh required: generated binding is ambiguous");
+                if (!parsed.isEmpty()) key = parsed.get(0);
+            }
+            if (declaration.hasValue(NamedDecl.USR) || declarations.stream().anyMatch(d -> d.hasValue(NamedDecl.USR)))
+                result.put(declaration, identities.computeIfAbsent(key, ignored -> CompilerEntityIdentity.newEditedEntity()));
+        }
+        return result;
     }
 
     public boolean sameFunctionEntity(FunctionDecl first, FunctionDecl second) {
         if (!current(first) || !current(second)) return false;
         Object left = key(first), right = key(second);
         if (left == null || right == null) return false;
-        return left.equals(right) && compatibleType(first, second) && generatedIdentity.compatibleFunctions(first, second);
+        boolean same = left.equals(right);
+        if (!same && first.hasValue(NamedDecl.USR) != second.hasValue(NamedDecl.USR)) {
+            var generated = first.hasValue(NamedDecl.USR) ? second : first;
+            var parsed = first.hasValue(NamedDecl.USR) ? first : second;
+            var matches = functionOccurrences(generated).stream().filter(f -> f.hasValue(NamedDecl.USR)).toList();
+            same = matches.stream().map(this::key).distinct().count() == 1 && matches.contains(parsed);
+        }
+        return same && compatibleType(first, second) && generatedIdentity.compatibleFunctions(first, second);
+    }
+
+    public List<pt.up.fe.specs.clava.ast.expr.CallExpr> getFunctionCalls(FunctionDecl query) {
+        var declarations = Collections.newSetFromMap(new IdentityHashMap<NamedDecl, Boolean>());
+        declarations.addAll(getEntityOccurrences(query));
+        if (declarations.isEmpty()) return List.of();
+        var nodes = new ArrayList<ClavaNode>(app.getDescendants());
+        for (var unit : app.getTranslationUnits()) for (var declaration : unit.get(TranslationUnit.INCLUDED_DECLARATIONS))
+            nodes.addAll(declaration.getDescendantsAndSelfStream().toList());
+        var calls = new LinkedHashMap<Object, pt.up.fe.specs.clava.ast.expr.CallExpr>();
+        for (var node : nodes) if (node instanceof pt.up.fe.specs.clava.ast.expr.CallExpr call
+                && call.getFunctionDecl().map(declarations::contains).orElse(false)) {
+            var location = call.getLocation();
+            Object source = location.isValid() && !call.get(ClavaNode.IS_MACRO) ? location : call;
+            calls.putIfAbsent(source, call);
+        }
+        return List.copyOf(calls.values());
     }
 
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
@@ -168,6 +266,7 @@ public class DeclarationsCache {
         return first.get(NamedDecl.USR_TYPE).equals(second.get(NamedDecl.USR_TYPE));
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends NamedDecl> DefinitionResolution<T> resolve(T query, Map<Object, List<T>> index,
             java.util.function.Predicate<T> definition, java.util.function.BiPredicate<T, T> compatible) {
         if (!current(query)) return result(DefinitionResolution.Kind.STALE, List.of());
@@ -183,8 +282,14 @@ public class DeclarationsCache {
             return result(DefinitionResolution.Kind.STALE, List.of());
         var candidates = candidates(all, definition);
         if (candidates.isEmpty()) return result(DefinitionResolution.Kind.MISSING, List.of());
-        if (candidates.stream().anyMatch(candidate -> !compatible.test(query, candidate)))
-            return result(DefinitionResolution.Kind.INCOMPATIBLE, candidates);
+        if (candidates.stream().anyMatch(candidate -> !compatible.test(query, candidate))) {
+            // Different compiler contexts of one physical definition are inspectable separately.
+            // A generated query still needs a compatible binding; distinct source definitions remain conflicts.
+            boolean oneSource = query.hasValue(NamedDecl.USR) && candidates.stream().allMatch(sourceKeys::containsKey)
+                    && candidates.stream().map(sourceKeys::get).distinct().count() == 1
+                    && candidates.stream().anyMatch(candidate -> compatible.test(query, candidate));
+            if (!oneSource) return result(DefinitionResolution.Kind.INCOMPATIBLE, candidates);
+        }
         if (query instanceof VarDecl && candidates.size() > 1
                 && candidates.stream().allMatch(candidate -> candidate.hasValue(NamedDecl.USR))
                 && candidates.stream().map(DeclarationIdentity::origin).distinct().count() == 1
@@ -193,9 +298,29 @@ public class DeclarationsCache {
                     .filter(candidate -> candidate.get(NamedDecl.USR_DEFINITION_KIND).equals("definition")).toList();
             candidates = complete.isEmpty() ? List.of(candidates.get(0)) : complete;
         }
-        // Equal source coordinates or USRs are not proof that two definition occurrences are equivalent.
-        return result(candidates.size() == 1 ? DefinitionResolution.Kind.UNIQUE
-                : DefinitionResolution.Kind.AMBIGUOUS, candidates);
+        var contexts = new ArrayList<T>();
+        var sources = new LinkedHashMap<Object, T>();
+        for (var candidate : candidates) {
+            Object source = sourceKeys.containsKey(candidate) ? sourceKeys.get(candidate) : candidate;
+            if (sources.containsKey(source)) continue;
+            var peers = source instanceof SourceDeclaration physical
+                    ? sourceOccurrences.getOrDefault(physical, List.of()) : List.<NamedDecl>of(candidate);
+            for (var peer : peers) {
+                if (!current(peer)) return result(DefinitionResolution.Kind.STALE, List.of());
+                if (definition.test((T) peer) && !contexts.contains(peer)) contexts.add((T) peer);
+            }
+            // Prefer an occurrence attached to its owning editable source file, when one is selected.
+            T owner = source instanceof SourceDeclaration physical
+                    ? (T) sourceOwners.computeIfAbsent(physical, ignored -> peers.stream().filter(this::isDefinition).min(Comparator
+                            .comparing((NamedDecl node) -> node.getAncestorTry(TranslationUnit.class).isEmpty())
+                            .thenComparing(node -> pt.up.fe.specs.clava.ClavaNodes.normalizeDecl(node) != node)
+                            .thenComparing(node -> Objects.toString(DeclarationIdentity.origin(node), ""))
+                            .thenComparing(ClavaNode::getId)).orElse(candidate)) : candidate;
+            sources.putIfAbsent(source, owner);
+        }
+        var sourceDefinitions = List.copyOf(sources.values());
+        return new DefinitionResolution<>(sourceDefinitions.size() == 1 ? DefinitionResolution.Kind.UNIQUE
+                : DefinitionResolution.Kind.AMBIGUOUS, sourceDefinitions, contexts);
     }
 
     @SuppressWarnings("unchecked")

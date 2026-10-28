@@ -119,10 +119,14 @@ public abstract class NamedDecl extends Decl {
         if (declarations.isEmpty() && hasValue(USR))
             throw new IllegalStateException("Cannot rename an unsupported or stale compiler entity");
         if (declarations.stream().noneMatch(declaration -> declaration == this)) declarations.add(this);
-        Object entity = get(EDITED_ENTITY).orElseGet(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::newEditedEntity);
-        declarations.forEach(declaration -> declaration.set(DECL_NAME, name));
-        declarations.forEach(declaration -> pt.up.fe.specs.clava.utils.CompilerEntityIdentity.captureEdit(declaration, entity));
-        app.ifPresent(pt.up.fe.specs.clava.ast.extra.App::clearCache);
+        if (app.isPresent()) app.get().editDeclarations(declarations, declaration -> declaration.set(DECL_NAME, name));
+        else {
+            declarations.forEach(declaration -> declaration.set(DECL_NAME, name));
+            if (hasValue(USR)) {
+                Object entity = get(EDITED_ENTITY).orElseGet(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::newEditedEntity);
+                declarations.forEach(declaration -> pt.up.fe.specs.clava.utils.CompilerEntityIdentity.captureEdit(declaration, entity));
+            }
+        }
     }
 
     public void setDeclName(String declName) {

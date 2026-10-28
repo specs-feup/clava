@@ -187,10 +187,14 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         app.ifPresent(owner -> owner.getEntityOccurrences(this).stream().filter(FunctionDecl.class::isInstance)
                 .map(FunctionDecl.class::cast).forEach(declarations::add));
         if (declarations.stream().noneMatch(function -> function == this)) declarations.add(this);
-        Object entity = get(NamedDecl.EDITED_ENTITY).orElseGet(CompilerEntityIdentity::newEditedEntity);
-        declarations.forEach(edit);
-        declarations.forEach(function -> CompilerEntityIdentity.captureEdit(function, entity));
-        app.ifPresent(App::clearCache);
+        if (app.isPresent()) app.get().editDeclarations(declarations, declaration -> edit.accept((FunctionDecl) declaration));
+        else {
+            declarations.forEach(edit);
+            if (hasValue(NamedDecl.USR)) {
+                Object entity = get(NamedDecl.EDITED_ENTITY).orElseGet(CompilerEntityIdentity::newEditedEntity);
+                declarations.forEach(function -> CompilerEntityIdentity.captureEdit(function, entity));
+            }
+        }
     }
 
     public boolean isInline() {
@@ -211,7 +215,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @return
      */
     public Optional<Stmt> setBody(Stmt body) {
+        if (hasValue(NamedDecl.USR) && get(NamedDecl.USR_SOURCE_STATE).isPresent() && getAppTry().isPresent()) {
+            Optional<Stmt> previous = hasBody() ? Optional.of((Stmt) getChild(getNumChildren() - 1)) : Optional.empty();
+            editEntity(function -> function.setBodySingle((Stmt) body.copy()));
+            return previous;
+        }
+        return setBodySingle(body);
+    }
 
+    private Optional<Stmt> setBodySingle(Stmt body) {
         // If no body, just add the stmt and return
         if (!hasBody()) {
             addChild(body);
@@ -356,7 +368,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         List<String> codeElements = new ArrayList<>();
 
         if (get(IS_INLINE_SPECIFIED)) {
-            if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
+            var unit = getAncestorTry(TranslationUnit.class).or(() -> getAppTry().flatMap(app ->
+                    get(ORIGINATING_TRANSLATION_UNIT).flatMap(origin -> app.getTranslationUnits().stream()
+                            .filter(candidate -> candidate.getFile().toPath().toAbsolutePath().normalize().toString().equals(origin)).findFirst())));
+            if (unit.map(owner -> owner.get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)).orElse(false)) {
                 codeElements.add("__inline__");
             } else {
                 codeElements.add("inline");
@@ -525,26 +540,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return this;
     }
 
-    private boolean isCorrespondingCall(CallExpr call) {
-        return call.getFunctionDecl().map(declaration -> getAppTry()
-                .map(app -> app.isSameFunctionEntity(this, declaration)).orElse(this == declaration)).orElse(false);
-    }
-
-    /**
-     * @return all the calls to this function declaration.
-     */
+    /** Source-level callers, including retained header callers, without duplicate TU analysis views. */
     public List<CallExpr> getCalls() {
-        // Get all the calls
-        App app = getAppTry().orElse(null);
-        if (app == null) {
-            return Collections.emptyList();
-        }
-
-        return app.getDescendantsStream()
-                .filter(CallExpr.class::isInstance)
-                .map(CallExpr.class::cast)
-                .filter(this::isCorrespondingCall)
-                .collect(Collectors.toList());
+        return getAppTry().map(app -> app.getFunctionCalls(this)).orElse(List.of());
     }
 
     public void setParameters(List<ParmVarDecl> params) {
@@ -553,6 +551,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     private void setParametersSingle(List<ParmVarDecl> params) {
+        var previous = getParameters();
+        for (var reference : getDescendants(pt.up.fe.specs.clava.ast.expr.DeclRefExpr.class)) {
+            int index = previous.indexOf(reference.get(pt.up.fe.specs.clava.ast.expr.DeclRefExpr.DECL));
+            if (index < 0) continue;
+            if (index >= params.size())
+                throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("removed parameter is still used in the body");
+            reference.set(pt.up.fe.specs.clava.ast.expr.DeclRefExpr.DECL, params.get(index));
+            reference.setType(params.get(index).getType());
+        }
         // Remove current parameters
         removeChildren(ParmVarDecl.class);
 
@@ -584,6 +591,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         editEntity(function -> {
             function.getChild(ParmVarDecl.class, index).setType(type);
             var functionType = (FunctionType) function.getFunctionType().copy();
+            functionType.setParamTypes(new ArrayList<>(functionType.getParamTypes()));
             functionType.setParamType(index, type);
             function.setType(functionType);
         });

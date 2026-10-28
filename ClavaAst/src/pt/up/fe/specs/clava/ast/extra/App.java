@@ -76,6 +76,108 @@ public class App extends ClavaNode {
     private GlobalManager globalManager;
 
     private DeclarationsCache declarationsCache;
+    private pt.up.fe.specs.clava.utils.SharedSourceEdits sharedSourceEdits;
+    private final Set<java.nio.file.Path> sourceActionFiles = new HashSet<>();
+    private final Set<FunctionDecl> editedSignatures = Collections.newSetFromMap(new IdentityHashMap<>());
+
+    public void captureSharedSources() {
+        sharedSourceEdits = new pt.up.fe.specs.clava.utils.SharedSourceEdits(this);
+    }
+
+    /** One source action updates its related entities and references, or rolls back as a whole. */
+    public void editDeclarations(List<? extends NamedDecl> declarations, java.util.function.Consumer<NamedDecl> edit) {
+        for (var declaration : declarations)
+            if (declaration.hasValue(NamedDecl.USR) && declaration.getAncestorTry(TranslationUnit.class).isEmpty()
+                    && pt.up.fe.specs.clava.utils.SourceDeclaration.of(declaration).isEmpty())
+                throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("no unique source owner for " + declaration.getDeclName());
+        var identities = getDeclarationsCache().editIdentities(declarations);
+        if (sharedSourceEdits == null) captureSharedSources();
+        var sourceBefore = sharedSourceEdits.before();
+        var unitCodeBefore = new IdentityHashMap<TranslationUnit, String>();
+        for (var unit : getTranslationUnits()) unitCodeBefore.put(unit, unit.getCode());
+        var changedFiles = new HashSet<java.nio.file.Path>();
+        var data = new IdentityHashMap<ClavaNode, Map<DataKey<?>, Object>>();
+        var arities = new IdentityHashMap<FunctionDecl, Integer>();
+        for (var declaration : declarations) if (declaration instanceof FunctionDecl function)
+            arities.put(function, function.getNumParameters());
+        var children = new IdentityHashMap<ClavaNode, List<ClavaNode>>();
+        for (var declaration : declarations) {
+            declaration.getDescendantsAndSelfStream().forEach(node -> {
+                if (!data.containsKey(node)) {
+                    var snapshot = new HashMap<DataKey<?>, Object>();
+                    for (var key : node.getDataKeysWithValues()) snapshot.put(key, node.get(key));
+                    data.put(node, snapshot);
+                }
+                children.putIfAbsent(node, new ArrayList<>(node.getChildren()));
+            });
+        }
+        var members = new IdentityHashMap<pt.up.fe.specs.clava.ast.expr.MemberExpr, String>();
+        var nodes = new ArrayList<ClavaNode>(getDescendants());
+        for (var unit : getTranslationUnits()) for (var declaration : unit.get(TranslationUnit.INCLUDED_DECLARATIONS))
+            nodes.addAll(declaration.getDescendantsAndSelfStream().toList());
+        for (var node : nodes) if (node instanceof pt.up.fe.specs.clava.ast.expr.MemberExpr member
+                && declarations.stream().anyMatch(declaration -> declaration == member.getMemberDecl()))
+            members.put(member, member.getMemberName());
+        try {
+            declarations.forEach(edit);
+            for (var member : members.keySet()) {
+                var declaration = member.getMemberDecl();
+                String oldName = (String) data.get(declaration).get(NamedDecl.DECL_NAME);
+                String oldMemberName = members.get(member);
+                if (oldMemberName.equals(oldName)) member.setMemberName(declaration.getDeclName());
+                else if (oldMemberName.startsWith(oldName + "<"))
+                    member.setMemberName(declaration.getDeclName() + oldMemberName.substring(oldName.length()));
+                else if (!oldName.equals(declaration.getDeclName()))
+                    throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("unsupported member reference spelling");
+            }
+            identities.forEach(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::captureEdit);
+            for (var unit : getTranslationUnits()) if (!unit.getCode().equals(unitCodeBefore.get(unit)))
+                changedFiles.add(unit.getFile().toPath().toAbsolutePath().normalize());
+            sharedSourceEdits.after(sourceBefore);
+        } catch (RuntimeException failure) {
+            for (var node : data.keySet()) {
+                var snapshot = data.get(node);
+                var keys = new HashSet<>(node.getDataKeysWithValues());
+                keys.addAll(snapshot.keySet());
+                for (var key : keys) restoreKey(node, snapshot, key);
+                while (node.hasChildren()) node.removeChild(0);
+            }
+            for (var node : data.keySet()) for (var child : children.get(node)) node.addChild(child);
+            members.forEach(pt.up.fe.specs.clava.ast.expr.MemberExpr::setMemberName);
+            clearCache();
+            throw failure;
+        }
+        for (var declaration : declarations) if (declaration instanceof FunctionDecl function
+                && arities.get(function) != function.getNumParameters())
+            editedSignatures.add(function);
+        sourceActionFiles.addAll(changedFiles);
+        clearCache();
+    }
+
+    /** Transformations may stage parameter and caller edits; validate the completed graph at emission. */
+    private void validateEditedCalls() {
+        if (editedSignatures.isEmpty()) return;
+        var nodes = new ArrayList<ClavaNode>(getDescendants());
+        for (var unit : getTranslationUnits()) for (var declaration : unit.get(TranslationUnit.INCLUDED_DECLARATIONS))
+            nodes.addAll(declaration.getDescendantsAndSelfStream().toList());
+        for (var node : nodes) if (node instanceof CallExpr call && call.getFunctionDecl().isPresent()) {
+            var function = call.getFunctionDecl().get();
+            if (!editedSignatures.contains(function)) continue;
+            int minimum = 0;
+            var parameters = function.getParameters();
+            for (int i = 0; i < parameters.size(); i++)
+                if (!parameters.get(i).hasInit() && !parameters.get(i).get(pt.up.fe.specs.clava.ast.decl.ParmVarDecl.HAS_INHERITED_DEFAULT_ARG))
+                    minimum = i + 1;
+            if (call.getNumArgs() < minimum
+                    || (!function.getFunctionType().isVariadic() && call.getNumArgs() > parameters.size()))
+                throw new pt.up.fe.specs.clava.utils.RefreshRequiredException("signature edit still requires caller arguments before emission");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> void restoreKey(ClavaNode node, Map<DataKey<?>, Object> snapshot, DataKey<T> key) {
+        node.set(key, snapshot.containsKey(key) ? (T) snapshot.get(key) : null);
+    }
 
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
@@ -200,6 +302,7 @@ public class App extends ClavaNode {
      * @return
      */
     public Map<File, String> getCode(File destinationFolder, Set<String> modifiedFiles) {
+        validateEditedCalls();
         Map<File, String> files = new HashMap<>();
 
         boolean enableModifiedFilesFilter = enableModifiedFilesFilter(getFiles(), modifiedFiles);
@@ -214,6 +317,7 @@ public class App extends ClavaNode {
             files.put(destinationFile, code);
         }
 
+        if (sharedSourceEdits != null) sharedSourceEdits.emit(destinationFolder, files);
         return files;
     }
 
@@ -224,7 +328,8 @@ public class App extends ClavaNode {
         }
 
         // If file was modified, generate code from the translation uni
-        if (modifiedFiles.contains(tUnit.getFilename())) {
+        if (modifiedFiles.contains(tUnit.getFilename())
+                || sourceActionFiles.contains(tUnit.getFile().toPath().toAbsolutePath().normalize())) {
             return tUnit.getCode();
         }
 
@@ -258,6 +363,10 @@ public class App extends ClavaNode {
 
     public List<NamedDecl> getEntityOccurrences(NamedDecl declaration) {
         return getDeclarationsCache().getEntityOccurrences(declaration);
+    }
+
+    public List<CallExpr> getFunctionCalls(FunctionDecl function) {
+        return getDeclarationsCache().getFunctionCalls(function);
     }
 
     public boolean isSameFunctionEntity(FunctionDecl first, FunctionDecl second) {
