@@ -150,7 +150,9 @@ public class CallWrap {
         TranslationUnit implTu = getImplementationFile();
 
         FunctionDecl wrapperFunctionDeclHeader = (FunctionDecl) declaration.copy();
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGeneratedTree(wrapperFunctionDeclHeader);
         FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) declaration.copy();
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGeneratedTree(wrapperFunctionDeclImpl);
         wrapperFunctionDeclHeader.setDeclName(name);
         wrapperFunctionDeclImpl.setDeclName(name);
 
@@ -181,6 +183,7 @@ public class CallWrap {
         FunctionDecl originalDefinition = (FunctionDecl) cxxCall.getDefinitionImpl().getNodeImpl();
 
         FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) originalDefinition.copy();
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGeneratedTree(wrapperFunctionDeclImpl);
         wrapperFunctionDeclImpl.setDeclName(name);
 
         // Create code that calls previous function
@@ -202,6 +205,7 @@ public class CallWrap {
 
         // adds a wrapper forward declaration...
         FunctionDecl forwardDecl = (FunctionDecl) wrapperFunctionDeclImpl.copy();
+        pt.up.fe.specs.clava.utils.CompilerEntityIdentity.makeGeneratedTree(forwardDecl);
         forwardDecl.getBody().get().detach();
         if (hasDecl) {
             // ... after the declaration of the original

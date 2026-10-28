@@ -18,106 +18,190 @@ import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.utils.CompilerEntityIdentity;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.util.SpecsIo;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TUnitProcessor {
 
-    private final static boolean ERROR_ON_AMBIGUOUS_SIGNATURE = false;
-    // private final static Set<Class<? extends ClavaNode>> IGNORE_CLASSES = new HashSet<>(
-    // Arrays.asList(ImplicitCastExpr.class));
+    private static final boolean ERROR_ON_AMBIGUOUS_SIGNATURE = false;
+    private static final int MAX_COLLISION_SAMPLES = 5;
+    private static final int MAX_COLLISION_SAMPLE_LENGTH = 240;
 
     private final List<ClangAstData> parsingData;
     private final boolean normalize;
 
-    private final Map<String, ClavaNode> signatureToNodeMap;
-    private final Set<String> ambiguousSignatures;
+    private final Map<NormalizationKey, ClavaNode> keyToNodeMap;
+    private final Set<NormalizationKey> ambiguousKeys;
+    private final IdentityHashMap<ClavaNode, NormalizationKey> nodeKeys;
     private long processedNodes;
     private long processedFields;
     private long replacedNodes;
     private long ambiguousHits;
-    private Set<Class<? extends ClavaNode>> ignoredNodesClasses;
-    private StringBuilder collisionReport;
+    private long collisionCount;
+    private final Set<Class<? extends ClavaNode>> ignoredNodesClasses;
+    private final List<String> collisionSamples;
 
     public TUnitProcessor(List<ClangAstData> parsingData, boolean normalize) {
         this.parsingData = parsingData;
         this.normalize = normalize;
 
-        this.signatureToNodeMap = new HashMap<>();
-        this.ambiguousSignatures = new HashSet<>();
-        this.processedNodes = 0;
-        this.processedFields = 0;
-        this.replacedNodes = 0;
-        this.ambiguousHits = 0;
+        this.keyToNodeMap = new HashMap<>();
+        this.ambiguousKeys = new HashSet<>();
+        this.nodeKeys = new IdentityHashMap<>();
         this.ignoredNodesClasses = new HashSet<>();
-        this.collisionReport = new StringBuilder();
+        this.collisionSamples = new ArrayList<>();
     }
 
     /**
      * Ensures that fields of the AST point to nodes in other TranslationUnits, when that is the case.
      */
     public List<TranslationUnit> getTranslationUnits() {
-
-        // Create list of Translation Units
         List<TranslationUnit> tUnits = parsingData.stream()
                 .map(data -> data.get(ClangAstData.TRANSLATION_UNIT))
                 .collect(Collectors.toList());
 
-        // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
-        // original clang tree
-        // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
-        // TreeTransformer transformer = new TreeTransformer(ClangStreamParser.getPostParsingRules());
-        // for (TranslationUnit tUnit : tUnits) {
-        // transformer.transform(tUnit);
-        // }
-
-        if (!normalize) {
-            return tUnits;
+        assignTranslationUnitOrigins(tUnits);
+        var compilerDeclarations = new ArrayList<NamedDecl>();
+        for (int i = 0; i < tUnits.size(); i++) {
+            var included = new ArrayList<NamedDecl>();
+            for (var node : parsingData.get(i).get(ClangAstData.CLAVA_NODES).getNodes().values()) {
+                if (node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR)) {
+                    if (declaration.get(NamedDecl.USR_GENERATION_FAILED) != declaration.get(NamedDecl.USR).isEmpty())
+                        throw new IllegalArgumentException("Inconsistent USR generation status for node " + declaration.getId());
+                    if (declaration.get(NamedDecl.USR_TYPE_GENERATION_FAILED) != declaration.get(NamedDecl.USR_TYPE).isEmpty())
+                        throw new IllegalArgumentException("Inconsistent type USR generation status for node " + declaration.getId());
+                    if (!Set.of("none", "declaration", "definition", "tentative")
+                            .contains(declaration.get(NamedDecl.USR_DEFINITION_KIND)))
+                        throw new IllegalArgumentException("Unknown compiler definition kind for node " + declaration.getId());
+                    compilerDeclarations.add(declaration);
+                    if (declaration.getAncestorTry(TranslationUnit.class).isEmpty()) included.add(declaration);
+                }
+            }
+            tUnits.get(i).set(TranslationUnit.INCLUDED_DECLARATIONS, List.copyOf(included));
         }
-
-        // Build node locations map
-        // Map<String, ClavaNode> locationToNodeMap = new HashMap<>();
-        // long allNodes = 0;
-        // long nodesWithValidLoc = 0;
-        for (TranslationUnit tUnit : tUnits) {
-            tUnit.getDescendantsStream()
-                    // Only consider nodes with complete locations
-                    // .filter(node -> node.getLocation().isComplete())
-                    // Only consider nodes with valid locations, nodes with invalid locations in the AST at this point
-                    // where most likely introduced by Clava (e.g., Includes, Null nodes, etc)
-                    .filter(node -> node.getLocation().isValid())
-                    // Ignore certain nodes that might have the same location, such as ImplicitCastExpr
-                    // .filter(node -> !IGNORE_CLASSES.contains(node.getClass()))
-                    .forEach(node -> addNode(node));
-
-            // allNodes += tUnit.getDescendantsStream().count();
-            // nodesWithValidLoc += tUnit.getDescendantsStream()
-            // .filter(node -> node.getLocation().isValid())
-            // .count();
-        }
-
-        // System.out.println("ALL NODES: " + allNodes);
-        // System.out.println("NODES WITH VALID LOCS: " + nodesWithValidLoc);
-
-        // Iterate over all ClavaNodes and replace fields that have ClavaNodes
-
-        parsingData.stream()
+        CompilerEntityIdentity.captureAll(compilerDeclarations);
+        // Native references already resolve through the dump-local node registry. Rewriting them
+        // by source coordinates would destroy TU ownership, particularly for macro-configured headers.
+        // Cross-TU entity lookup belongs exclusively to DeclarationsCache.
+        boolean compilerGraph = parsingData.stream()
                 .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
-                .forEach(node -> replaceFields(node));
+                .anyMatch(node -> node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR));
+        if (!normalize || compilerGraph) return tUnits;
 
-        ClavaLog.debug(() -> "During AST normalization processed " + processedFields + " fields in " + processedNodes
-                + " nodes ");
-        ClavaLog.debug(() -> "Removed " + replacedNodes + " nodes during normalization and found " + ambiguousHits
-                + " queries to ambiguous signatures, with the following classes: "
-                + ignoredNodesClasses.stream().map(Class::getSimpleName).sorted().collect(Collectors.toList()));
+        resetRunState();
+        try {
+            assignTranslationUnitOrigins(tUnits);
+            indexTreeCandidates(tUnits);
+            snapshotRegisteredNodesAndQueries();
 
-        if (ambiguousHits > 0) {
-            ClavaLog.debug(() -> "Collision report:\n" + collisionReport);
+            // Every key used in this phase has already been captured. Rewriting an earlier reference therefore
+            // cannot change the identity observed by a later lookup.
+            parsingData.stream()
+                    .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
+                    .forEach(this::replaceFields);
+
+            ClavaLog.debug(() -> "During AST normalization processed " + processedFields + " fields in " + processedNodes
+                    + " nodes");
+            ClavaLog.debug(() -> "Removed " + replacedNodes + " nodes during normalization and found " + ambiguousHits
+                    + " queries to ambiguous signatures, with the following classes: "
+                    + ignoredNodesClasses.stream().map(Class::getSimpleName).sorted().collect(Collectors.toList()));
+
+            if (ambiguousHits > 0) {
+                ClavaLog.debug(this::formatCollisionReport);
+            }
+
+            return tUnits;
+        } finally {
+            // A TUnitProcessor can outlive this call. Do not retain ASTs through pass-local indexes.
+            keyToNodeMap.clear();
+            ambiguousKeys.clear();
+            nodeKeys.clear();
         }
+    }
 
-        return tUnits;
+    private void resetRunState() {
+        keyToNodeMap.clear();
+        ambiguousKeys.clear();
+        nodeKeys.clear();
+        ignoredNodesClasses.clear();
+        collisionSamples.clear();
+        processedNodes = 0;
+        processedFields = 0;
+        replacedNodes = 0;
+        ambiguousHits = 0;
+        collisionCount = 0;
+    }
+
+    private void indexTreeCandidates(List<TranslationUnit> tUnits) {
+        for (TranslationUnit tUnit : tUnits) {
+            tUnit.getDescendantsStream().forEach(node -> {
+                // Only candidates with a valid source location can be shared.
+                if (node.getLocation().isValid()) {
+                    addNode(node, snapshotKey(node));
+                }
+            });
+        }
+    }
+
+    private void assignTranslationUnitOrigins(List<TranslationUnit> tUnits) {
+        for (int i = 0; i < tUnits.size(); i++) {
+            TranslationUnit tUnit = tUnits.get(i);
+            if (tUnit.getFile() == null) {
+                continue;
+            }
+
+            String origin = SpecsIo.getCanonicalPath(tUnit.getFile());
+            assignOriginIfMissing(tUnit, origin);
+            tUnit.getDescendantsStream().forEach(node -> assignOriginIfMissing(node, origin));
+
+            // Registry membership is the authoritative owner for detached parser nodes, including declarations and
+            // references parsed from included headers.
+            parsingData.get(i).get(ClangAstData.CLAVA_NODES).getNodes().values()
+                    .forEach(node -> assignOriginIfMissing(node, origin));
+        }
+    }
+
+    private void assignOriginIfMissing(ClavaNode node, String origin) {
+        if (node.get(ClavaNode.ORIGINATING_TRANSLATION_UNIT).isEmpty()) {
+            node.set(ClavaNode.ORIGINATING_TRANSLATION_UNIT, Optional.of(origin));
+        }
+    }
+
+    private void snapshotRegisteredNodesAndQueries() {
+        for (ClangAstData data : parsingData) {
+            for (ClavaNode node : data.get(ClangAstData.CLAVA_NODES).getNodes().values()) {
+                forEachNodeValue(node, this::snapshotKey);
+            }
+        }
+    }
+
+    private NormalizationKey snapshotKey(ClavaNode node) {
+        return nodeKeys.computeIfAbsent(node, NormalizationKey::snapshot);
+    }
+
+    private void forEachNodeValue(ClavaNode node, java.util.function.Consumer<ClavaNode> consumer) {
+        for (DataKey<?> key : node.getKeysWithNodes()) {
+            Object value = node.get(key);
+
+            if (value instanceof ClavaNode child) {
+                consumer.accept(child);
+                continue;
+            }
+
+            if (value instanceof Optional<?> optional) {
+                optional.filter(ClavaNode.class::isInstance).map(ClavaNode.class::cast).ifPresent(consumer);
+                continue;
+            }
+
+            if (value instanceof List<?> list) {
+                list.stream().filter(ClavaNode.class::isInstance).map(ClavaNode.class::cast).forEach(consumer);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -126,167 +210,125 @@ public class TUnitProcessor {
 
         for (DataKey<?> key : node.getKeysWithNodes()) {
             processedFields++;
+            Object value = node.get(key);
 
-            Class<?> valueClass = key.getValueClass();
-
-            // Field is a ClavaNode
-            if (ClavaNode.class.isAssignableFrom(valueClass)) {
-                ClavaNode value = (ClavaNode) node.get(key);
-
-                normalizeNode(value).ifPresent(normalizedNode -> {
+            if (value instanceof ClavaNode oldNode) {
+                ClavaNode normalizedNode = normalizeNode(oldNode);
+                if (normalizedNode != null && normalizedNode != oldNode) {
                     node.set((DataKey<Object>) key, normalizedNode);
                     replacedNodes++;
-                });
-                // ClavaNode normalizedNode = locationToNodeMap.get(value.getNodeSignature());
-                // if (normalizedNode == null) {
-                // continue;
-                // }
-                //
-                // node.set((DataKey<Object>) key, normalizedNode);
-                // replacedNodes++;
-
-                // System.out.println("NODE " + normalizedNode.getClass());
-
+                }
                 continue;
             }
 
-            // Field is a Optional<ClavaNode>
-            if (Optional.class.isAssignableFrom(valueClass)) {
-                ClavaNode value = ((Optional<ClavaNode>) node.get(key)).get();
-
-                normalizeNode(value).ifPresent(normalizedNode -> {
-                    node.set((DataKey<Object>) key, Optional.of(normalizedNode));
-                    replacedNodes++;
-                });
-
-                // ClavaNode normalizedNode = locationToNodeMap.get(value.getNodeSignature());
-                // if (normalizedNode == null) {
-                // continue;
-                // }
-                //
-                // node.set((DataKey<Object>) key, Optional.of(normalizedNode));
-                // replacedNodes++;
-                // System.out.println("OPTIONAL OF " + normalizedNode.getClass());
-                continue;
-            }
-
-            // Field is a List<ClavaNode>
-            if (List.class.isAssignableFrom(valueClass)) {
-                List<ClavaNode> clavaNodes = (List<ClavaNode>) node.get(key);
-                List<ClavaNode> newClavaNodes = new ArrayList<>(clavaNodes.size());
-
-                for (int i = 0; i < clavaNodes.size(); i++) {
-                    ClavaNode oldNode = clavaNodes.get(i);
-
-                    ClavaNode normalizedNode = normalizeNode(oldNode).orElse(oldNode);
-                    newClavaNodes.add(normalizedNode);
-                    if (normalizedNode != oldNode) {
-                        replacedNodes++;
-                    }
-
-                    // ClavaNode normalizedNode = locationToNodeMap.get(oldNode.getNodeSignature());
-                    // if (normalizedNode == null) {
-                    // newClavaNodes.add(oldNode);
-                    // } else {
-                    // newClavaNodes.add(normalizedNode);
-                    // replacedNodes++;
-                    // }
+            if (value instanceof Optional<?> optional) {
+                if (optional.isEmpty() || !(optional.get() instanceof ClavaNode oldNode)) {
+                    continue;
                 }
 
-                node.set((DataKey<Object>) key, newClavaNodes);
+                ClavaNode normalizedNode = normalizeNode(oldNode);
+                if (normalizedNode != null && normalizedNode != oldNode) {
+                    node.set((DataKey<Object>) key, Optional.of(normalizedNode));
+                    replacedNodes++;
+                }
+                continue;
+            }
+
+            if (value instanceof List<?> list) {
+                List<Object> updatedNodes = null;
+                for (int i = 0; i < list.size(); i++) {
+                    Object element = list.get(i);
+                    if (!(element instanceof ClavaNode oldNode)) {
+                        continue;
+                    }
+
+                    ClavaNode normalizedNode = normalizeNode(oldNode);
+                    if (normalizedNode == null || normalizedNode == oldNode) {
+                        continue;
+                    }
+
+                    if (updatedNodes == null) {
+                        updatedNodes = new ArrayList<>(list);
+                    }
+
+                    updatedNodes.set(i, normalizedNode);
+                    replacedNodes++;
+                }
+
+                if (updatedNodes != null) {
+                    node.set((DataKey<Object>) key, updatedNodes);
+                }
                 continue;
             }
 
             ClavaLog.warning("Case not implemented: " + key + " in " + node.getClass());
         }
-
     }
 
-    private Optional<ClavaNode> normalizeNode(ClavaNode node) {
-        // If location of node is not valid, cannot be normalized
-        if (!node.getLocation().isValid()) {
-            return Optional.empty();
+    private ClavaNode normalizeNode(ClavaNode node) {
+        // A compiler-selected declaration target is an occurrence in its original TU. The entity index
+        // connects it to other declarations without redirecting it to a different TU's mutable node.
+        if (node instanceof NamedDecl declaration && declaration.hasValue(NamedDecl.USR)) return null;
+        if (!isNormalizable(node)) {
+            return null;
         }
 
-        // If node is a macro, cannot be normalized
-        if (node.get(ClavaNode.IS_MACRO)) {
-            return Optional.empty();
+        NormalizationKey key = nodeKeys.get(node);
+        if (key == null) {
+            throw new IllegalStateException("Missing pre-rewrite normalization snapshot for "
+                    + node.getClass().getName() + " with id " + node.getId());
         }
 
-        // Do not normalize InitListExpr, to avoid conflicts with semantic/syntactic forms
-        if (node instanceof InitListExpr) {
-            return Optional.empty();
-        }
-
-        String signature = node.getNodeSignature();
-
-        // If signature is ambiguous, cannot normalize node
-        if (ambiguousSignatures.contains(signature)) {
-            ClavaLog.debug(() -> "Signature collision: " + signature);
-            ClavaLog.debug(() -> "Signature keys:" + node.getSignatureKeys());
-            ClavaLog.debug(() -> "Node:" + node);
-            // System.out.println("PREVIOUS NODE:" + previousNode);
+        if (ambiguousKeys.contains(key)) {
             ambiguousHits++;
             ignoredNodesClasses.add(node.getClass());
 
             if (ERROR_ON_AMBIGUOUS_SIGNATURE) {
-                ClavaLog.debug(() -> "Collision report:\n" + collisionReport);
+                ClavaLog.debug(this::formatCollisionReport);
                 throw new RuntimeException("Found ambiguous signature that could not be solved during normalization");
             }
 
-            return Optional.empty();
+            return null;
         }
 
-        ClavaNode normalizedNode = signatureToNodeMap.get(signature);
-
-        return Optional.ofNullable(normalizedNode);
+        return keyToNodeMap.get(key);
     }
 
-    private void addNode(ClavaNode node) {
-        String id = node.getNodeSignature();
+    private boolean isNormalizable(ClavaNode node) {
+        return node.getLocation().isValid() && !node.get(ClavaNode.IS_MACRO) && !(node instanceof InitListExpr);
+    }
 
-        // If signature is ambiguous, do not add to map
-        if (ambiguousSignatures.contains(id)) {
+    private void addNode(ClavaNode node, NormalizationKey key) {
+        if (ambiguousKeys.contains(key)) {
             return;
         }
 
-        ClavaNode previousNode = signatureToNodeMap.put(id, node);
-
-        // If previous node is not null, signature is ambiguous, remove it from the map and add it to the set
-        if (previousNode != null) {
-            signatureToNodeMap.remove(id);
-            ambiguousSignatures.add(id);
-            collisionReport.append("Collision: ").append(id).append("\nOLD NODE: " + previousNode)
-                    .append("\nNEW NODE: ")
-                    .append(node).append("\n");
+        ClavaNode previousNode = keyToNodeMap.putIfAbsent(key, node);
+        if (previousNode == null) {
+            return;
         }
-        /*
-        // If previous node is not null, node signature might not have been able to distinguish between nodes
-        if (previousNode != null) {
-            // System.out.println("SIGNATURE COLLISION: " + id);
-            // System.out.println("SIGNATURE KEYS:" + node.getSignatureKeys());
-            //
-            // System.out.println("PREVIOUS NODE:" + previousNode);
-            // System.out.println("CURRENT NODE:" + node);
-        
-            sameLocationPairs++;
-            ignoredNodesClasses.add(node.getClass());
-            // SpecsCheck.checkArgument(previousNode.equals(node),
-            SpecsCheck.checkArgument(previousNode.getClass().equals(node.getClass()),
-                    () -> "Found repeated location '" + id + "' where nodes have different classes.\nOriginal node: "
-                            + previousNode
-                            + "\nNew node:" + node);
-        }
-        */
 
-        // SpecsCheck.checkArgument(previousNode == null,
-        // () -> "Found repeated location '" + id + "'.\nOriginal node: " + previousNode
-        // + "\nNew node:" + node);
+        keyToNodeMap.remove(key);
+        ambiguousKeys.add(key);
+        collisionCount++;
+
+        if (collisionSamples.size() < MAX_COLLISION_SAMPLES) {
+            String sample = key.compactDescription();
+            if (sample.length() > MAX_COLLISION_SAMPLE_LENGTH) {
+                sample = sample.substring(0, MAX_COLLISION_SAMPLE_LENGTH - 3) + "...";
+            }
+            collisionSamples.add(sample);
+        }
     }
 
-    // private String getLocationId(ClavaNode node) {
-    // // return node.getClass().getSimpleName() + "_" + node.getCode();
-    // return node.getClass().getSimpleName() + "_" + node.getLocation();
-    // }
-
+    private String formatCollisionReport() {
+        StringBuilder report = new StringBuilder("Ambiguous normalization keys: ").append(collisionCount);
+        for (String sample : collisionSamples) {
+            report.append("\n  ").append(sample);
+        }
+        if (collisionCount > collisionSamples.size()) {
+            report.append("\n  ... ").append(collisionCount - collisionSamples.size()).append(" more");
+        }
+        return report.toString();
+    }
 }

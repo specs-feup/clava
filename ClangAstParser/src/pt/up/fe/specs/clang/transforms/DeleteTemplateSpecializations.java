@@ -35,6 +35,8 @@ public class DeleteTemplateSpecializations implements SimplePostClavaRule {
         }
 
         FunctionDecl functionDecl = (FunctionDecl) node;
+        // Written specializations are distinct compiler entities with their own source definitions.
+        if (functionDecl.get(FunctionDecl.IS_EXPLICIT_TEMPLATE_SPECIALIZATION)) return;
 
         // if (!functionDecl.getFunctionDeclData().getTemplateKind().isSpecialization()) {
         if (!functionDecl.get(FunctionDecl.TEMPLATE_KIND).isSpecialization()) {

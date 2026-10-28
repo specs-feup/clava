@@ -48,6 +48,10 @@ public class TranslationUnit extends ClavaNode {
 
     /// DATAKEYS BEGIN
 
+    /** Parsed declarations from included files that are not children of this TU's editable source tree. */
+    public static final DataKey<List<NamedDecl>> INCLUDED_DECLARATIONS = KeyFactory.list("includedDeclarations", NamedDecl.class);
+
+
     /**
      * The path corresponding to this Translation Unit.
      */

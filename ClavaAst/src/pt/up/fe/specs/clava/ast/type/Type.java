@@ -116,6 +116,7 @@ public abstract class Type extends ClavaNode {
 
     protected <T, E extends T> ClavaNode set(DataKey<T> key, E value, boolean createCopy) {
         Type typeToChange = createCopy ? copy() : this;
+        typeToChange.identityChanged();
 
         if (value == null) {
             typeToChange.getData().remove(key);

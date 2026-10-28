@@ -395,15 +395,7 @@ public class CxxFunction<Self extends CxxFunction<Self>> extends AFunction<Self>
 
     @Override
     public void setNameImpl(String name) {
-        // Set both the names of corresponding definition and declaration
-        // Needs to first fetch both definition and declaration.
-        // If one is renamed before fetching the other, the other will not be found
-
-        var impl = this.getNodeImpl().getImplementation();
-        var proto = this.getNodeImpl().getPrototypes();
-
-        impl.ifPresent(node -> node.setName(name));
-        proto.stream().forEach(node -> node.setName(name));
+        getNodeImpl().setName(name);
     }
 
     @Override

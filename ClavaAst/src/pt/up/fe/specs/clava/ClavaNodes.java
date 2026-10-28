@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
@@ -453,10 +454,25 @@ public class ClavaNodes {
     }
 
     public static Decl normalizeDecl(Decl decl) {
-        // Replace Template Specializations with Templace declarations
         if (decl instanceof FunctionDecl) {
-            FunctionDecl fDecl = (FunctionDecl) decl;
-            return fDecl.get(FunctionDecl.PRIMARY_TEMPLATE_DECL).orElse((fDecl));
+            FunctionDecl function = (FunctionDecl) decl;
+            if (function.get(FunctionDecl.IS_EXPLICIT_TEMPLATE_SPECIALIZATION)) return function;
+            var primary = function.get(FunctionDecl.PRIMARY_TEMPLATE_DECL);
+            if (primary.isEmpty() || !function.get(FunctionDecl.TEMPLATE_KIND).isSpecialization()) {
+                return function;
+            }
+
+            // Clang uses the primary template's source location for implicit instantiations, while an
+            // explicit specialization has its own written location. Only collapse the former. When the
+            // location evidence is unavailable, preserving the specialization avoids resolving its call
+            // to an unrelated primary-template body.
+            var functionStart = function.getLocation().getStart();
+            var primaryStart = primary.get().getLocation().getStart();
+            if (!functionStart.isValid() || !primaryStart.isValid() || !functionStart.equals(primaryStart)) {
+                return function;
+            }
+
+            return primary.get();
         }
 
         return decl;

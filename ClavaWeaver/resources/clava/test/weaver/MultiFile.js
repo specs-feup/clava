@@ -6,7 +6,8 @@ Query.search("record", "A").first().name = "A_renamed";
 Query.search("function", "template_foo").first().name = "template_foo_renamed";
 
 for (const $call of Query.search("call", "template_foo_2")) {
-    $call.definition.name = "template_foo_2_renamed";
+    // Source actions through a declaration coordinate the same header definition and all of its TU views.
+    $call.declaration.name = "template_foo_2_renamed";
     break;
 }
 

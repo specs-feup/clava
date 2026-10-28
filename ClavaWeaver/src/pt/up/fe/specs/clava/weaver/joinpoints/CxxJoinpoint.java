@@ -729,14 +729,21 @@ public class CxxJoinpoint<Self extends CxxJoinpoint<Self>> extends AJoinpoint<Se
         return getNodeImpl().hashCode();
     }
 
+    private ClavaNode prepareGeneratedCopy(ClavaNode copy) {
+        copy.getDescendantsAndSelfStream().filter(pt.up.fe.specs.clava.ast.decl.NamedDecl.class::isInstance)
+                .map(pt.up.fe.specs.clava.ast.decl.NamedDecl.class::cast)
+                .forEach(pt.up.fe.specs.clava.utils.CompilerEntityIdentity::makeGenerated);
+        return copy;
+    }
+
     @Override
     public AJoinpoint<?> copyImpl() {
-        return CxxJoinpoints.create(getNodeImpl().copy(), getWeaverEngine());
+        return CxxJoinpoints.create(prepareGeneratedCopy(getNodeImpl().copy()), getWeaverEngine());
     }
 
     @Override
     public AJoinpoint<?> deepCopyImpl() {
-        return CxxJoinpoints.create(getNodeImpl().deepCopy(), getWeaverEngine());
+        return CxxJoinpoints.create(prepareGeneratedCopy(getNodeImpl().deepCopy()), getWeaverEngine());
     }
 
     @Override

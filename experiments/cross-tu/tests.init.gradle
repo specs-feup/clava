@@ -1,0 +1,22 @@
+// Apply only to an experiment run; production build and coverage settings stay unchanged.
+gradle.afterProject { project ->
+    if (project.name == 'ClangAstParser') {
+        project.tasks.named('test') {
+            outputs.upToDateWhen { false }
+            extensions.findByType(org.gradle.testing.jacoco.plugins.JacocoTaskExtension).enabled = false
+            maxHeapSize = '1g'
+            systemProperty 'clava.crossTuReview', project.findProperty('crossTuReview') ?: 'false'
+            def resultName = project.findProperty('crossTuResults') ?:
+                (project.hasProperty('crossTuReview') ? 'cross-tu-review' : 'cross-tu-regression')
+            reports.junitXml.outputLocation.set(project.layout.buildDirectory.dir("test-results/$resultName"))
+            reports.html.outputLocation.set(project.layout.buildDirectory.dir("reports/tests/$resultName"))
+            if (project.hasProperty('crossTuIsolatedTmp')) {
+                def isolatedTmp = project.layout.buildDirectory.dir('cross-tu-native-tmp').get().asFile
+                jvmArgs "-Djava.io.tmpdir=$isolatedTmp"
+                doFirst { isolatedTmp.mkdirs() }
+            }
+        }
+        project.tasks.named('jacocoTestReport') { enabled = false }
+        project.tasks.named('jacocoTestCoverageVerification') { enabled = false }
+    }
+}

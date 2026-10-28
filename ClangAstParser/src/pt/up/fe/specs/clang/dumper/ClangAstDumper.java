@@ -176,7 +176,7 @@ public class ClangAstDumper {
             arguments.add("-Xclang");
             arguments.add("-plugin-arg-DumpAst");
             arguments.add("-Xclang");
-            arguments.add("-file-id=" + id);
+            arguments.add("-file-id=0");
             arguments.add("-Xclang");
             arguments.add("-plugin-arg-DumpAst");
             arguments.add("-Xclang");
@@ -187,7 +187,9 @@ public class ClangAstDumper {
             arguments.add("-c");
             arguments.add(pathForCompiler(sourceFile, generatedParseRoot));
 
-            arguments.add("-id=" + id);
+            // Wire node IDs are TU-local. Apply the analysis-group scope only in WireReader, so
+            // adding/reordering other TUs cannot invalidate an unchanged TU's cached native output.
+            arguments.add("-id=0");
 
             arguments.add(SYSTEM_HEADER_THRESHOLD_OPTION + systemIncludesThreshold);
 

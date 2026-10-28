@@ -60,6 +60,7 @@ public class BuiltinType extends Type {
     }
 
     public BuiltinType setKindLiteral(String literalKind) {
+        identityChanged();
         getData().put(KIND_LITERAL, literalKind);
         return this;
     }

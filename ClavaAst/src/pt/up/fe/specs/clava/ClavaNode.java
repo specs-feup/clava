@@ -85,6 +85,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      */
     public final static DataKey<String> ID = KeyFactory.string("id");
 
+    /** Parser-owned TU provenance, including detached nodes originating in included headers. */
+    public static final DataKey<Optional<String>> ORIGINATING_TRANSLATION_UNIT =
+            KeyFactory.optional("originatingTranslationUnit");
+
     /**
      * Location of this node. Might not be available (e.g., type nodes).
      */
@@ -132,6 +136,44 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     private final DataStore dataI;
     private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
+    // Not serialized: this is a local mutation stamp, never compiler or entity identity.
+    private static final class IdentityMutationCounter { long version; }
+    private IdentityMutationCounter identityMutations;
+
+    public final long getIdentityMutationVersion() { return identityMutations().version; }
+
+    private IdentityMutationCounter identityMutations() {
+        if (identityMutations == null) identityMutations = new IdentityMutationCounter();
+        return identityMutations;
+    }
+
+    protected final void identityChanged() {
+        // Nodes that nobody observes need no counter, including statement trees and parser construction.
+        // The first observer (or data-sharing view) enables tracking before retaining its baseline.
+        if (identityMutations != null) identityMutations.version++;
+        if (dataI != null && dataI.hasValue(CONTEXT)) dataI.get(CONTEXT).declarationsChanged();
+    }
+
+    @Override
+    public void setAsParentOf(ClavaNode child) {
+        super.setAsParentOf(child);
+        identityChanged();
+        child.identityChanged();
+    }
+
+    @Override
+    public ClavaNode removeChild(int index) {
+        var removed = super.removeChild(index);
+        identityChanged();
+        return removed;
+    }
+
+    @Override
+    public void removeParent() {
+        super.removeParent();
+        identityChanged();
+    }
+
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
@@ -588,6 +630,12 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
             return this;
         }
 
+        // Validation bookkeeping does not change the state being validated.
+        if (key != pt.up.fe.specs.clava.ast.decl.NamedDecl.USR_SOURCE_STATE
+                && key != pt.up.fe.specs.clava.ast.decl.NamedDecl.EDITED_ENTITY_STATE
+                && (!dataI.hasValue(key) || dataI.get(key) != value))
+            identityChanged();
+
         // If value is null, remove value, if present
         if (value == null) {
             if (dataI.hasValue(key)) {
@@ -604,6 +652,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     @Override
     public ClavaNode set(ClavaNode instance) {
+        identityChanged();
         return dataClass.set(instance);
     }
 
@@ -686,7 +735,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
             try {
                 // System.out.println("NODE CLASS: " + nodeClass);
                 // System.out.println("CONSTRUCTOR METHOD: " + constructorMethod);
-                return nodeClass.cast(constructorMethod.newInstance(newDataStore, children));
+                var instance = constructorMethod.newInstance(newDataStore, children);
+                // Data-sharing views must share the mutation stamp too. Ordinary copies keep independent stamps.
+                if (shareData) instance.identityMutations = identityMutations();
+                return nodeClass.cast(instance);
             } catch (Exception e) {
                 throw new RuntimeException("Could not call constructor for ClavaNode", e);
             }
