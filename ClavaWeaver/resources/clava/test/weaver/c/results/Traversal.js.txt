@@ -1,33 +1,11 @@
-Vardecl {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxVardecl {}
-}
-DeclStmt {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxDeclStmt {}
-}
-Varref {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxVarref {}
-}
-IntLiteral {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxIntLiteral {}
-}
-IntLiteral {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxIntLiteral {}
-}
-IntLiteral {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxIntLiteral {}
-}
-BinaryOp {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxBinaryOp {}
-}
-BinaryOp {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxBinaryOp {}
-}
-BinaryOp {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxBinaryOp {}
-}
-ExprStmt {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxExprStmt {}
-}
-Body {
-_javaObject: nodeJava_pt_up_fe_specs_clava_weaver_joinpoints_CxxBody {}
-}
+Vardecl
+DeclStmt
+Varref
+IntLiteral
+IntLiteral
+IntLiteral
+BinaryOp
+BinaryOp
+BinaryOp
+ExprStmt
+Body
