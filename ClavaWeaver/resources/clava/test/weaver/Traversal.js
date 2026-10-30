@@ -6,5 +6,5 @@ for (const $jp of Query.search("function", "foo").search(
   undefined,
   TraversalType.POSTORDER
 )) {
-  console.log($jp);
+  console.log($jp.constructor.name);
 }
