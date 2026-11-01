@@ -113,7 +113,8 @@ public class ClavaDataParsers {
         // boolean startIsMacro = LineStreamParsers.oneOrZero(lines);
         boolean startIsMacro = false;
 
-        SourceLocation startLocation = new SourceLocation(startFilepath, startLine, startColumn, startIsMacro);
+        SourceLocation startLocation = SourceLocation.fromCanonicalPath(startFilepath, startLine, startColumn,
+                startIsMacro);
 
         // Check if start is the same as the end
         String secondPart = lines.nextLine();
@@ -130,7 +131,7 @@ public class ClavaDataParsers {
         // boolean endIsMacro = LineStreamParsers.oneOrZero(lines);
         boolean endIsMacro = false;
 
-        SourceLocation endLocation = new SourceLocation(endFilepath, endLine, endColumn, endIsMacro);
+        SourceLocation endLocation = SourceLocation.fromCanonicalPath(endFilepath, endLine, endColumn, endIsMacro);
         return new SourceRange(startLocation, endLocation);
     }
 

@@ -45,13 +45,31 @@ public class SourceLocation {
     }
 
     public SourceLocation(String filepath, int line, int col, boolean isMacro) {
+        this(filepath, line, col, isMacro, false);
+    }
+
+    private SourceLocation(String filepath, int line, int col, boolean isMacro, boolean isCanonical) {
         // Normalize filepath
         // this.filepath = filepath != null ? new File(filepath).getAbsolutePath() : null;
         // this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
-        setFilepath(filepath);
+        this.filepath = isCanonical ? filepath : canonicalPath(filepath);
         this.line = line;
         this.column = col;
         this.isMacro = isMacro;
+    }
+
+    /**
+     * Creates a location whose filepath is already canonical, skipping the filesystem lookup.
+     */
+    public static SourceLocation fromCanonicalPath(String canonicalFilepath, int line, int col, boolean isMacro) {
+        return new SourceLocation(canonicalFilepath, line, col, isMacro, true);
+    }
+
+    /**
+     * Returns the canonical path of a filepath, or null if the filepath is null.
+     */
+    public static String canonicalPath(String filepath) {
+        return filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
     }
 
     public boolean isMacro() {
@@ -63,7 +81,7 @@ public class SourceLocation {
     }
 
     public void setFilepath(String filepath) {
-        this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
+        this.filepath = canonicalPath(filepath);
     }
 
     public int getLine() {
