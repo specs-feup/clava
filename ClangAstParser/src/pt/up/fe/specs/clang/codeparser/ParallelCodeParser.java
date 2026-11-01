@@ -228,7 +228,7 @@ public class ParallelCodeParser extends CodeParser {
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
-            String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(true));
+            String usedSize = SpecsStrings.parseSize(SpecsSystem.getUsedMemory(false));
             ClavaLog.metrics("Current memory used (Java):" + usedSize);
         }
 
