@@ -66,19 +66,19 @@
   "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
     "@specs-feup/lara": "^4.0.0",
-    "cytoscape": "^3.33.1"
+    "cytoscape": "^3.34.4"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
     "@types/java": "^0.9.6",
     "@types/node": "^24.0.0",
     "@types/yargs": "^17.0.35",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.1.0",
     "eslint-plugin-tsdoc": "^0.5.0",
-    "oxfmt": "^0.59.0",
-    "oxlint": "^1.74.0",
+    "oxfmt": "^0.76.0",
+    "oxlint": "^1.91.0",
+    "oxlint-tsgolint": "^7.0.2006",
     "typescript": "^7.0.2",
-    "oxlint-tsgolint": "^7.0.2001",
-    "vitest": "^4.1.10"
+    "vitest": "^5.1.0"
   }
 }
