@@ -238,8 +238,4 @@ public class CxxJoinpoints {
         return Optional.empty();
     }
 
-    public static CxxWeaver getWeaver(AJoinpoint<?> joinpoint) {
-        // Get root joinpoint (program)
-        return getProgram(joinpoint).getWeaverEngine();
-    }
 }
