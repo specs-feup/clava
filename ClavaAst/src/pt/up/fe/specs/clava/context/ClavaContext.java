@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.context;
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -48,7 +49,7 @@ public class ClavaContext extends ADataClass<ClavaContext> {
             .object("factory", ClavaFactory.class);
 
     public final static DataKey<CachedItems<String, String>> CACHED_FILEPATHS = KeyFactory
-            .generic("cachedFilepaths", () -> new CachedItems<String, String>(string -> string, true));
+            .generic("cachedFilepaths", () -> new CachedItems<String, String>(SourceLocation::canonicalPath, true));
 
     private final List<App> appStack;
 
@@ -62,7 +63,7 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         // Initialize factory
         set(FACTORY, new ClavaFactory(this));
 
-        set(CACHED_FILEPATHS, new CachedItems<>(string -> string, true));
+        set(CACHED_FILEPATHS, new CachedItems<>(SourceLocation::canonicalPath, true));
 
         appStack = new ArrayList<>();
     }
